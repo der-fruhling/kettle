@@ -6,7 +6,7 @@
 
     <artifactId>kettle</artifactId>
     <groupId>com.liamcoalstudio</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0000+754</version>
     <packaging>jar</packaging>
 
     <name>kettle</name>
