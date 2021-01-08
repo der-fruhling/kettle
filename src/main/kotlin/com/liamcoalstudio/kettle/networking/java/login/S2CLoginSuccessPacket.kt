@@ -27,11 +27,10 @@ class S2CLoginSuccessPacket(private val username: String) : Packet(0x02, null) {
     override fun updateOnWrite(state: ServerState, client: Client) {
         JavaServer.GLOBAL_CONTROLLER!!.get().execute {
             client.status = ClientState.Status.Play
-//            val codec = createDimensionCodec()
             val codec = SNBTUtil.fromSNBT(Files.readString(Path.of("objects/dimcodec.test.snbt"))) as CompoundTag
             NBTUtil.write(codec, File("test.nbt"))
             client.send(S2CJoinGamePacket(
-                eid = 0,
+                eid = KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!.newEntityId(),
                 hardcore = false,
                 gamemode = 1,
                 prevGamemode = -1,
@@ -49,29 +48,5 @@ class S2CLoginSuccessPacket(private val username: String) : Packet(0x02, null) {
                 worldName = "minecraft:overworld"
             ))
         }
-    }
-
-    private fun createDimensionCodec(): CompoundTag {
-        val compound = CompoundTag()
-
-        val dimType = CompoundTag()
-        dimType.putString("type", "minecraft:dimension_type")
-        val dimTypeValue = ListTag(CompoundTag::class.java)
-        Dimension.values().forEach { dim ->
-            dimTypeValue.add(dim.codec)
-        }
-        dimType.put("value", dimTypeValue)
-        compound.put("minecraft:dimension_type", dimType)
-
-        val biomeType = CompoundTag()
-        biomeType.putString("type", "minecraft:worldgen/biome")
-        val biomeTypeValue = ListTag(CompoundTag::class.java)
-        Biome.values().forEach { dim ->
-            biomeTypeValue.add(dim.codec)
-        }
-        biomeType.put("value", biomeTypeValue)
-        compound.put("minecraft:worldgen/biome", biomeType)
-
-        return compound
     }
 }

@@ -15,6 +15,7 @@ class World(val dimension: Dimension, val noise: FastNoiseLite) {
     val chunks = HashMap<Position, Chunk>().toMutableMap()
     val entities = MutableList<Entity?>(0) { null }
     val players = MutableList(0) { Player() }
+    val idsInUse = MutableList(0) { 0 }
     var seed = Random.nextLong()
     val logger = ConsoleLogger(World::class)
 
@@ -40,7 +41,13 @@ class World(val dimension: Dimension, val noise: FastNoiseLite) {
     }
 
     fun isChunkPosValid(pos: Position) = pos.inRange(LongRange(-32, 32), LongRange(0, 8), LongRange(-32, 32))
-    fun newEntityId() = Random.nextInt()
+
+    fun newEntityId(): Int {
+        val id = (0..Int.MAX_VALUE).first { !idsInUse.contains(it) }
+        idsInUse.add(id)
+        return id
+    }
+
     @ExperimentalStdlibApi
     fun generateChunkRange(xr: LongRange, yr: LongRange, zr: LongRange) {
         logger.info("Generating ${xr.count() * yr.count() * zr.count()} chunks.")
