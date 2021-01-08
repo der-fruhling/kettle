@@ -2,6 +2,7 @@ package com.liamcoalstudio.kettle.world
 
 import FastNoiseLite
 import com.liamcoalstudio.kettle.helpers.Dimension
+import com.liamcoalstudio.kettle.helpers.KettleProperties
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
 import com.liamcoalstudio.kettle.tasks.Tasks
 import java.time.Instant
@@ -36,7 +37,7 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
     @ExperimentalStdlibApi
     operator fun get(pos: Position): Chunk {
         if(!chunks.containsKey(pos))
-            chunks[pos] = Chunk(this, pos)
+            chunks[pos] = if(KettleProperties.flat) Chunk(pos) else Chunk(this, pos)
         return chunks[pos]!!
     }
 
@@ -91,17 +92,6 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
         }
 
     companion object {
-        fun createIfNotExist(s: String) {
-//            TODO()
-        }
-
-        fun readNBT(s: String): World? {
-//            val worldNBT = NBTUtil.read(File(s))
-//            val worldData = worldNBT.tag as CompoundTag
-//            val name = worldData.getString("Name")
-//            TODO()
-            return World(Dimension.OVERWORLD, FastNoiseLite(0))
-        }
 
         @ExperimentalStdlibApi
         fun noise(seed: Long): World {
