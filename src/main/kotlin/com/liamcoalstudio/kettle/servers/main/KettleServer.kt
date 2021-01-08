@@ -51,7 +51,6 @@ class KettleServer {
     @ExperimentalStdlibApi
     fun thread() {
         KettleProperties.load()
-        KettleProperties.save()
         initObjects()
         initWorlds()
         isFullyInitialized = true
@@ -89,11 +88,11 @@ class KettleServer {
             client.send(S2CEntityStatus(player.eid, 23))
             client.send(S2CEntityStatus(player.eid, 28))
             client.send(S2CPlayerPosAndLook(
-                0.0, false,
-                256.0, false,
-                0.0, false,
-                0.0f, false,
-                0.0f, false,
+                KettleProperties.spawn.x, false,
+                KettleProperties.spawn.y, false,
+                KettleProperties.spawn.z, false,
+                KettleProperties.spawn.yaw.toFloat(), false,
+                KettleProperties.spawn.pitch.toFloat(), false,
             ))
         }
     }

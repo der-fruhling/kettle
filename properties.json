@@ -1,0 +1,9 @@
+{
+  "motd": "Cat",
+  "viewDistance": 4,
+  "gamemode": 1,
+  "spawn": {
+    "x": 16.0,
+    "z": 16.0
+  }
+}
