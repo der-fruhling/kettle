@@ -50,8 +50,6 @@ class S2CChunkDataPacket @ExperimentalStdlibApi constructor(
         buf.addVarInt(cbuf.array.size)
         buf.addBuffer(cbuf)
 
-        println("$x $z ${bitmask.toString(2)} ${cbuf.array.contentToString()}")
-
         buf.addVarInt(0)
     }
 
