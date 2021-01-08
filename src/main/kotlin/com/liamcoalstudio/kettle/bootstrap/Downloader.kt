@@ -23,11 +23,11 @@ object Downloader {
     }
 
     fun downloadAll() {
-        val res = Downloader::class.java.getResource("/objects/download.json")
+        val res = Downloader::class.java.getResource("/download.json")
         val entries = Gson().fromJson(res.openStream().reader(), Array<DownloadEntry>::class.java)
         if(!File("objects").exists())
             File("objects").mkdir()
-        val toDownload = entries.filter { !File(it.dest).exists() }
+        val toDownload = entries.filter { !File("objects/${it.dest}").exists() }
         toDownload.forEach {
             download("objects/${it.dest}", URL(it.src))
         }

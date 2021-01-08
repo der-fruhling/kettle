@@ -65,7 +65,7 @@ class KettleServer {
 
     private fun initObjects() {
         BLOCKS = HashMap()
-        BLOCKS = Gson().fromJson(JavaServer::class.java.getResource("/objects/blocks.json").openStream().reader(),
+        BLOCKS = Gson().fromJson(JavaServer::class.java.getResource("/blocks.json").openStream().reader(),
             BLOCKS.javaClass)
     }
 
