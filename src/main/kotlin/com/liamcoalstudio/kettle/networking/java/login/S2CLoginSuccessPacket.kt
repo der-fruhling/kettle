@@ -9,6 +9,7 @@ import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.helpers.KettleProperties
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.servers.java.JavaServer
+import com.liamcoalstudio.kettle.servers.main.KettleServer
 import com.liamcoalstudio.kettle.world.Biome
 import net.querz.nbt.io.NBTUtil
 import net.querz.nbt.io.SNBTUtil

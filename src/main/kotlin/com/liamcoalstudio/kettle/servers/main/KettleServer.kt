@@ -40,7 +40,7 @@ class KettleServer {
 
     @ExperimentalStdlibApi
     private fun initWorlds() {
-        val world = World.noise(Random.nextLong())
+        val world = World.flat()
         worlds[Dimension.OVERWORLD] = world
 
         timer.scheduleAtFixedRate(LambdaTimerTask {

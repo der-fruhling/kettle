@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.HashMap
 import kotlin.random.Random
 
-class World(val dimension: Dimension, val noise: FastNoiseLite) {
+class World(val dimension: Dimension, val noise: FastNoiseLite?) {
     @ExperimentalStdlibApi
     val chunks = HashMap<Position, Chunk>().toMutableMap()
     val entities = MutableList<Entity?>(0) { null }
@@ -59,7 +59,7 @@ class World(val dimension: Dimension, val noise: FastNoiseLite) {
                     runnables.add {
                         ref.getAndUpdate {
 //                            it.logger.info("Generating $x, $y, $z")
-                            it[Position(x,y,z)] = Chunk(it, Position(x,y,z))
+                            it[Position(x,y,z)] = if(noise == null) Chunk(Position(x,y,z)) else Chunk(it, Position(x,y,z))
                             it
                         }
                     }
@@ -74,7 +74,7 @@ class World(val dimension: Dimension, val noise: FastNoiseLite) {
     }
 
     fun getNoise(x: Long, bx: Byte, y: Long, by: Byte, z: Long, bz: Byte, index: Float) =
-        ((noise.GetNoise(
+        ((noise!!.GetNoise(
             (x * 16).toFloat() + bx.toFloat(),
             (z * 16).toFloat() + bz.toFloat(),
             index) + 1.0) / 8.0) *
@@ -106,8 +106,15 @@ class World(val dimension: Dimension, val noise: FastNoiseLite) {
         @ExperimentalStdlibApi
         fun noise(seed: Long): World {
             val world = World(Dimension.OVERWORLD, FastNoiseLite(seed.toInt()))
-            world.noise.SetNoiseType(FastNoiseLite.NoiseType.Perlin)
+            world.noise!!.SetNoiseType(FastNoiseLite.NoiseType.Perlin)
             world.seed = seed
+            world.generateChunkRange(-32L..32L, 0L..15L, -32L..32L)
+            return world
+        }
+
+        @ExperimentalStdlibApi
+        fun flat(): World {
+            val world = World(Dimension.OVERWORLD, null)
             world.generateChunkRange(-32L..32L, 0L..15L, -32L..32L)
             return world
         }

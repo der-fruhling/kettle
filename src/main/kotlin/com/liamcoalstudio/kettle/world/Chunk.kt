@@ -7,7 +7,7 @@ import com.liamcoalstudio.kettle.logging.ConsoleLogger
 import kotlin.math.floor
 
 @ExperimentalStdlibApi
-class Chunk(world: World, pos: Position) {
+class Chunk(pos: Position) {
     fun write(buf: Buffer) {
         buf.addShort(blocks.count { it.value != 0 }.toShort())
         val count = 4
@@ -47,6 +47,15 @@ class Chunk(world: World, pos: Position) {
     val blocks: HashMap<Short, Int> = HashMap()
 
     init {
+        for (x in 0..15) for (y in 0..15) for (z in 0..15) {
+            if(y < 4 && pos.y == 0L)
+                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.stone
+            else
+                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.air
+        }
+    }
+
+    constructor(world: World, pos: Position) : this(pos) {
         val heightMap = world.heightMap(pos.x, pos.y, pos.z)
         for (x in 0..15) for (y in 0..15) for (z in 0..15) {
             if(heightMap[x][y][z] > 8.0)
@@ -55,5 +64,4 @@ class Chunk(world: World, pos: Position) {
                 blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.air
         }
     }
-
 }
