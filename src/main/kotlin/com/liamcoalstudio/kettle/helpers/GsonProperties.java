@@ -5,5 +5,5 @@ public class GsonProperties {
     int viewDistance = 8;
     int gamemode = 0;
     ConfiguredSpawnLocation spawn = new ConfiguredSpawnLocation();
-
+    boolean flat = false;
 }

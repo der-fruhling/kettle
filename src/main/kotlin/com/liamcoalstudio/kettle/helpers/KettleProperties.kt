@@ -12,6 +12,7 @@ object KettleProperties {
     var viewDistance by Delegates.notNull<Int>()
     var gamemode by Delegates.notNull<Int>()
     lateinit var spawn: ConfiguredSpawnLocation
+    var flat by Delegates.notNull<Boolean>()
 
     fun load() {
         val gson = Gson()
@@ -20,5 +21,6 @@ object KettleProperties {
         viewDistance = p.viewDistance
         gamemode = p.gamemode
         spawn = p.spawn
+        flat = p.flat
     }
 }

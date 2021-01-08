@@ -1,4 +1,7 @@
 {
   "minecraft:air": 0,
-  "minecraft:stone": 1
+  "minecraft:stone": 1,
+  "minecraft:grass_block": 9,
+  "minecraft:dirt": 10,
+  "minecraft:bedrock": 33
 }

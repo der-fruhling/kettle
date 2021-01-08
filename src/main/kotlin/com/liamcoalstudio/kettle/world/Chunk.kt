@@ -47,9 +47,10 @@ class Chunk(pos: Position) {
     val blocks: HashMap<Short, Int> = HashMap()
 
     init {
+        val layers = arrayOf(Block.bedrock, Block.dirt, Block.dirt, Block.grass_block)
         for (x in 0..15) for (y in 0..15) for (z in 0..15) {
             if(y < 4 && pos.y == 0L)
-                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.stone
+                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = layers[y]
             else
                 blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.air
         }

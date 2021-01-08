@@ -44,7 +44,7 @@ class S2CLoginSuccessPacket(private val username: String) : Packet(0x02, null) {
                 maxPlayers = 256,
                 enableRespawnScreen = true,
                 isDebug = false,
-                isFlat = false,
+                isFlat = KettleProperties.flat,
                 reducedDebugInfo = false,
                 viewDistance = KettleProperties.viewDistance,
                 worldName = "minecraft:overworld"
