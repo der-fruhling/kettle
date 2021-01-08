@@ -10,8 +10,8 @@ import com.liamcoalstudio.kettle.networking.main.packets.ClientState.Status.*
 enum class JavaPacket(val clientState: ClientState.Status, val id: Int, val producer: Producer<Packet>) {
     HHandshakePacket(Handshake, 0x00, C2SHandshakePacket()),
     SStatusRequestPacket(Status, 0x00, C2SStatusRequestPacket(null)),
+    SPingPacket(Status, 0x01, C2SPingPacket()),
     LLoginStart(Login, 0x00, C2SLoginStartPacket()),
-    HPingPacket(Handshake, 0x01, C2SPingPacket()),
     PClientStatus(Play, 0x04, C2SClientStatus()),
     PTeleportOK(Play, 0x00, C2STeleportConfirm()),
     PPlayerRP(Play, 0x13, C2SPlayerPosAndRot()),
