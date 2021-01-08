@@ -82,7 +82,8 @@ open class VarLongPacketObject(v: Long) : PacketObject<Long>(v) {
             }
             buf.put(temp)
         } while (obj != 0L)
-        return buf.array().toTypedArray()
+        val size = buf.flip().limit()
+        return buf.array().slice(0 until size).toTypedArray()
     }
 
     constructor(buf: Buffer) : this(fromByteArray(buf))

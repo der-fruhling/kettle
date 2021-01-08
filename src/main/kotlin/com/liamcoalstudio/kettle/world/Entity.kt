@@ -1,4 +1,4 @@
 package com.liamcoalstudio.kettle.world
 
-class Entity(val eid: Int) {
+abstract class Entity(val eid: Int) {
 }

@@ -1,4 +1,6 @@
+
 # Kettle Minecraft
+![Maven Package](https://github.com/LiamCoalStudio/kettle/workflows/Maven%20Package/badge.svg)  
 _Work in Progress Alternate Minecraft Server (un-official)_
 
 ## What is a kettle?

@@ -14,5 +14,4 @@ class NodeManager {
 
     fun putRead(byteArray: ByteArray) = startNodeRead.passThrough(byteArray)
     fun putWrite(byteArray: ByteArray): ByteArray = startNodeWrite.passThrough(byteArray)
-
 }

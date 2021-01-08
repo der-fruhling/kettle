@@ -1,8 +1,8 @@
 package com.liamcoalstudio.kettle.helpers
 
-import com.liamcoalstudio.kettle.servers.java.JavaServer
+import com.liamcoalstudio.kettle.servers.main.KettleServer
 
 object Block {
-    val air get() = JavaServer.BLOCKS["minecraft:air"]!![0]
-    val stone get() = JavaServer.BLOCKS["minecraft:stone"]!![0]
+    val air: Int get() = KettleServer.BLOCKS["minecraft:air"]!!
+    val stone: Int get() = KettleServer.BLOCKS["minecraft:stone"]!!
 }

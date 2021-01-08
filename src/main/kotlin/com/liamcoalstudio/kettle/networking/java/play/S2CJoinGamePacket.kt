@@ -1,11 +1,16 @@
 package com.liamcoalstudio.kettle.networking.java.play
 
-import com.liamcoalstudio.kettle.nbt.NBTTag
 import com.liamcoalstudio.kettle.networking.main.Client
 import com.liamcoalstudio.kettle.networking.main.packets.ClientState
 import com.liamcoalstudio.kettle.networking.main.packets.Packet
 import com.liamcoalstudio.kettle.helpers.Buffer
+import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
+import com.liamcoalstudio.kettle.servers.java.JavaServer
+import com.liamcoalstudio.kettle.servers.main.KettleServer
+import net.querz.nbt.io.NBTSerializer
+import net.querz.nbt.io.NamedTag
+import net.querz.nbt.tag.Tag
 
 class S2CJoinGamePacket(
     val eid: Int,
@@ -14,8 +19,8 @@ class S2CJoinGamePacket(
     val prevGamemode: Byte,
     val worldCount: Int,
     val worlds: Array<String>,
-    val dimensionCodec: NBTTag,
-    val dimension: NBTTag,
+    val dimensionCodec: Tag<*>,
+    val dimension: Tag<*>,
     val worldName: String,
     val hashedSeed: Long,
     val maxPlayers: Int,
@@ -32,8 +37,8 @@ class S2CJoinGamePacket(
         buf.addByte(prevGamemode)
         buf.addVarInt(worldCount)
         worlds.forEach { buf.addString(it) }
-        dimensionCodec.write(buf)
-        dimension.write(buf)
+        buf.addBuffer(Buffer(NBTSerializer(false).toBytes(NamedTag("dimension_codec", dimensionCodec))))
+        buf.addBuffer(Buffer(NBTSerializer(false).toBytes(NamedTag("dimension", dimension))))
         buf.addString(worldName)
         buf.addLong(hashedSeed)
         buf.addVarInt(maxPlayers)
@@ -44,7 +49,10 @@ class S2CJoinGamePacket(
         buf.addBoolean(isFlat)
     }
 
+    @ExperimentalStdlibApi
     override fun updateOnWrite(state: ServerState, client: Client) {
-        super.updateOnWrite(state, client)
+        KettleServer.GLOBAL!!.get().execute {
+            KettleServer.GLOBAL!!.get().onPlayerJoin(client)
+        }
     }
 }

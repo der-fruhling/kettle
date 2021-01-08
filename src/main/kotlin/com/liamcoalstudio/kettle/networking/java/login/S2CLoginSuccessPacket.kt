@@ -1,24 +1,22 @@
 package com.liamcoalstudio.kettle.networking.java.login
 
-import com.liamcoalstudio.kettle.nbt.NBTTag
-import com.liamcoalstudio.kettle.nbt.comp.NBTCompound
-import com.liamcoalstudio.kettle.nbt.comp.NBTList
-import com.liamcoalstudio.kettle.nbt.comp.NBTRootCompound
-import com.liamcoalstudio.kettle.nbt.comp.NBTString
-import com.liamcoalstudio.kettle.nbt.prim.NBTByte
-import com.liamcoalstudio.kettle.nbt.prim.NBTFloat
-import com.liamcoalstudio.kettle.nbt.prim.NBTInt
 import com.liamcoalstudio.kettle.networking.java.play.S2CJoinGamePacket
 import com.liamcoalstudio.kettle.networking.main.Client
 import com.liamcoalstudio.kettle.networking.main.packets.ClientState
 import com.liamcoalstudio.kettle.networking.main.packets.Packet
 import com.liamcoalstudio.kettle.helpers.Buffer
+import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.servers.java.JavaServer
+import com.liamcoalstudio.kettle.world.Biome
+import net.querz.nbt.io.NBTUtil
+import net.querz.nbt.io.SNBTUtil
+import net.querz.nbt.tag.CompoundTag
+import net.querz.nbt.tag.ListTag
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
 import java.util.*
-import com.liamcoalstudio.kettle.nbt.prim.NBTByte.Companion.nfalse
-import com.liamcoalstudio.kettle.nbt.prim.NBTByte.Companion.ntrue
-import com.liamcoalstudio.kettle.nbt.prim.NBTDouble
 
 class S2CLoginSuccessPacket(private val username: String) : Packet(0x02, null) {
     override fun write(buf: Buffer) {
@@ -29,16 +27,18 @@ class S2CLoginSuccessPacket(private val username: String) : Packet(0x02, null) {
     override fun updateOnWrite(state: ServerState, client: Client) {
         JavaServer.GLOBAL_CONTROLLER!!.get().execute {
             client.status = ClientState.Status.Play
-            val codec = createDimensionCodec()
+//            val codec = createDimensionCodec()
+            val codec = SNBTUtil.fromSNBT(Files.readString(Path.of("objects/dimcodec.test.snbt"))) as CompoundTag
+            NBTUtil.write(codec, File("test.nbt"))
             client.send(S2CJoinGamePacket(
                 eid = 0,
                 hardcore = false,
-                gamemode = 0,
+                gamemode = 1,
                 prevGamemode = -1,
                 worldCount = 1,
                 worlds = arrayOf("minecraft:overworld"),
-                dimensionCodec = codec["_"],
-                dimension = codec["_"]["minecraft:dimension_type"]["value"][0]["element"],
+                dimensionCodec = codec,
+                dimension = (codec.getCompoundTag("minecraft:dimension_type").getListTag("value") as ListTag<CompoundTag>)[0]["element"],
                 hashedSeed = 0,
                 maxPlayers = 256,
                 enableRespawnScreen = true,
@@ -51,64 +51,27 @@ class S2CLoginSuccessPacket(private val username: String) : Packet(0x02, null) {
         }
     }
 
-    private fun createDimensionCodec(): NBTTag {
-        val compound = NBTRootCompound()
-        compound["_"] = NBTCompound()
-        compound["_"]["minecraft:dimension_type"] = NBTCompound()
-        compound["_"]["minecraft:dimension_type"]["type"] = NBTString("minecraft:dimension_type")
-        compound["_"]["minecraft:dimension_type"]["value"] = NBTList(1)
-        compound["_"]["minecraft:dimension_type"]["value"][0] =
-            createCodecOverworld(compound["_"]["minecraft:dimension_type"]["value"][0])
-        compound["_"]["minecraft:worldgen/biome"] = NBTCompound()
-        compound["_"]["minecraft:worldgen/biome"]["type"] = NBTString("minecraft:worldgen/biome")
-        compound["_"]["minecraft:worldgen/biome"]["value"] = NBTList(1)
-        compound["_"]["minecraft:worldgen/biome"]["value"][0] =
-            createPlainsBiome(compound["_"]["minecraft:worldgen/biome"]["value"][0])
-        return compound
-    }
+    private fun createDimensionCodec(): CompoundTag {
+        val compound = CompoundTag()
 
-    private fun createCodecOverworld(parent: NBTTag): NBTTag {
-        val compound = NBTCompound(parent)
-        compound["name"] = NBTString("minecraft:overworld")
-        compound["id"] = NBTInt(0)
-        compound["element"] = NBTCompound()
-        compound["element"]["piglin_safe"] = NBTByte(nfalse)
-        compound["element"]["natural"] = NBTByte(ntrue)
-        compound["element"]["ambient_light"] = NBTFloat(0.0f)
-        compound["element"]["infiniburn"] = NBTString("minecraft:infiniburn_overworld")
-        compound["element"]["respawn_anchor_works"] = NBTByte(nfalse)
-        compound["element"]["has_skylight"] = NBTByte(ntrue)
-        compound["element"]["bed_works"] = NBTByte(ntrue)
-        compound["element"]["effects"] = NBTString("minecraft:overworld")
-        compound["element"]["has_raids"] = NBTByte(ntrue)
-        compound["element"]["logical_height"] = NBTInt(256)
-        compound["element"]["coordinate_scale"] = NBTDouble(1.0)
-        compound["element"]["ultrawarm"] = NBTByte(nfalse)
-        compound["element"]["has_ceiling"] = NBTByte(nfalse)
-        return compound
-    }
+        val dimType = CompoundTag()
+        dimType.putString("type", "minecraft:dimension_type")
+        val dimTypeValue = ListTag(CompoundTag::class.java)
+        Dimension.values().forEach { dim ->
+            dimTypeValue.add(dim.codec)
+        }
+        dimType.put("value", dimTypeValue)
+        compound.put("minecraft:dimension_type", dimType)
 
-    private fun createPlainsBiome(parent: NBTTag): NBTTag {
-        val compound = NBTCompound(parent)
-        compound["name"] = NBTString("minecraft:plains")
-        compound["id"] = NBTInt(0)
-        compound["element"] = NBTCompound()
-        compound["element"]["precipitation"] = NBTString("rain")
-        compound["element"]["depth"] = NBTFloat(0.125f)
-        compound["element"]["temperature"] = NBTFloat(0.8f)
-        compound["element"]["scale"] = NBTFloat(0.05f)
-        compound["element"]["downfall"] = NBTFloat(0.4f)
-        compound["element"]["category"] = NBTString("plains")
-        compound["element"]["effects"] = NBTCompound()
-        compound["element"]["effects"]["sky_color"] = NBTInt(7907327)
-        compound["element"]["effects"]["water_fog_color"] = NBTInt(329011)
-        compound["element"]["effects"]["fog_color"] = NBTInt(12638463)
-        compound["element"]["effects"]["water_color"] = NBTInt(4159204)
-        compound["element"]["effects"]["mood_sound"] = NBTCompound()
-        compound["element"]["effects"]["mood_sound"]["tick_delay"] = NBTInt(6000)
-        compound["element"]["effects"]["mood_sound"]["offset"] = NBTDouble(2.0)
-        compound["element"]["effects"]["mood_sound"]["sound"] = NBTString("minecraft:ambient.cave")
-        compound["element"]["effects"]["mood_sound"]["block_search_extent"] = NBTInt(8)
+        val biomeType = CompoundTag()
+        biomeType.putString("type", "minecraft:worldgen/biome")
+        val biomeTypeValue = ListTag(CompoundTag::class.java)
+        Biome.values().forEach { dim ->
+            biomeTypeValue.add(dim.codec)
+        }
+        biomeType.put("value", biomeTypeValue)
+        compound.put("minecraft:worldgen/biome", biomeType)
+
         return compound
     }
 }

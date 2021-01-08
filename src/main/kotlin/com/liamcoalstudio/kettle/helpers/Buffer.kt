@@ -10,6 +10,7 @@ import java.util.*
  */
 class Buffer() {
     val hasMore: Boolean get() = readIndex < list.size
+    val bytesLeft: Int get() =  list.size - readIndex
     private var list: MutableList<Byte> = MutableList(0) { 0 }
     private var readIndex = 0
     var array
@@ -44,7 +45,7 @@ class Buffer() {
     fun addVarLong(long: Long) = add(VarLongPacketObject(long))
     fun addBoolean(boolean: Boolean) = add(BooleanPacketObject(boolean))
     fun addString(string: String) = add(StringPacketObject(string, false))
-    fun addPacketBuffer(buffer: Buffer) = add(buffer.array)
+    fun addBuffer(buffer: Buffer) = add(buffer.array)
     fun addUUID(uuid: UUID) = add(UUIDPacketObject(uuid))
     fun addNBTString(string: String) = add(StringPacketObject(string, true))
 
@@ -58,7 +59,7 @@ class Buffer() {
     fun getVarLong() = VarLongPacketObject(this).obj
     fun getBoolean() = BooleanPacketObject(get(1)).obj
     fun getString() = StringPacketObject(this, false).obj
-    fun getPacketBuffer(size: Int) = Buffer(get(size).toByteArray())
+    fun getBuffer(size: Int) = Buffer(get(size).toByteArray())
     fun getUUID() = UUIDPacketObject(this).obj
     fun getNBTString() = StringPacketObject(this, true).obj
 }

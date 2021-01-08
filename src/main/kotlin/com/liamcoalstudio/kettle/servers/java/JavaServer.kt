@@ -1,13 +1,13 @@
 package com.liamcoalstudio.kettle.servers.java
 
-import com.google.gson.Gson
 import com.liamcoalstudio.kettle.base.Server
 import com.liamcoalstudio.kettle.base.ServerController
+import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
-import com.liamcoalstudio.kettle.nbt.NBTTag
 import com.liamcoalstudio.kettle.networking.main.Client
 import com.liamcoalstudio.kettle.networking.main.TCPServer
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
+import com.liamcoalstudio.kettle.servers.main.KettleServer
 import com.liamcoalstudio.kettle.servers.main.QueueExecutor
 import com.liamcoalstudio.kettle.world.Player
 import java.lang.Exception
@@ -20,7 +20,6 @@ class JavaServer : Server {
 
     private var iExecutor = QueueExecutor()
     override val executor: Executor = iExecutor
-    val players = MutableList(0) { Player() }
 
     lateinit var server: TCPServer
 
@@ -60,9 +59,7 @@ class JavaServer : Server {
     }
 
     private fun initObjects(): Boolean {
-        BLOCKS = HashMap()
-        BLOCKS = Gson().fromJson(JavaServer::class.java.getResource("/objects/blocks.json").openStream().reader(),
-                                 BLOCKS.javaClass)
+
         return true
     }
 
@@ -72,7 +69,8 @@ class JavaServer : Server {
     }
 
     private fun tickNetworking() {
-
+        if(KettleServer.GLOBAL!!.get().isFullyInitialized)
+            KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!.players.forEach { it.client!!.tick() }
     }
 
     private fun clientConnected(server: TCPServer, client: Client) {
@@ -88,6 +86,5 @@ class JavaServer : Server {
         const val PROTOCOL_NUMBER = 754
         var GLOBAL_CONTROLLER: AtomicReference<JavaServerController>? = null
         lateinit var GLOBAL: JavaServer
-        lateinit var BLOCKS: HashMap<String, Array<Int>>
     }
 }

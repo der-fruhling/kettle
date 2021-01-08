@@ -1,5 +1,7 @@
 package com.liamcoalstudio.kettle.world
 
+import com.liamcoalstudio.kettle.helpers.ChunkPos
+
 data class Position(val x: Long, val y: Long, val z: Long) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -19,31 +21,16 @@ data class Position(val x: Long, val y: Long, val z: Long) {
         return result
     }
 
-    operator fun div(long: Long): Position {
-        return Position(x / long, y / long, z / long)
-    }
+    operator fun div(long: Long): Position = Position(x / long, y / long, z / long)
+    operator fun rem(long: Long): Position = Position(x % long, y % long, z % long)
+    operator fun plus(long: Long): Position = Position(x + long, y + long, z + long)
+    operator fun div(other: Position): Position = Position(x / other.x, y / other.y, z / other.z)
+    operator fun rem(other: Position): Position = Position(x % other.x, y % other.y, z % other.z)
+    operator fun plus(other: Position): Position = Position(x + other.x, y + other.y, z + other.z)
+    fun toChunkPos(): ChunkPos = ChunkPos(x.toByte(), y.toByte(), z.toByte())
+    override fun toString(): String = "Position(x=$x, y=$y, z=$z)"
 
-    operator fun rem(long: Long): Position {
-        return Position(x % long, y % long, z % long)
-    }
+    fun inRange(xRange: LongRange, yRange: LongRange, zRange: LongRange) =
+        xRange.contains(x) and yRange.contains(y) and zRange.contains(z)
 
-    operator fun plus(long: Long): Position {
-        return Position(x + long, y + long, z + long)
-    }
-
-    operator fun div(other: Position): Position {
-        return Position(x / other.x, y / other.y, z / other.z)
-    }
-
-    operator fun rem(other: Position): Position {
-        return Position(x % other.x, y % other.y, z % other.z)
-    }
-
-    operator fun plus(other: Position): Position {
-        return Position(x + other.x, y + other.y, z + other.z)
-    }
-
-    fun inRange(xRange: LongRange, yRange: LongRange, zRange: LongRange): Boolean {
-        return xRange.contains(x) and yRange.contains(y) and zRange.contains(z)
-    }
 }
