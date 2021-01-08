@@ -37,8 +37,6 @@ class S2CChunkDataPacket @ExperimentalStdlibApi constructor(
         compound.put("Heightmap", heightmap)
         buf.addBuffer(Buffer(NBTSerializer(false).toBytes(NamedTag("_", compound))))
 
-        println(NBTSerializer(false).toBytes(NamedTag("Heightmaps", compound)).contentToString())
-
         buf.addVarInt(1024)
         for(i in 0 until 1024)
             buf.addVarInt(Biome.OCEAN.id)
