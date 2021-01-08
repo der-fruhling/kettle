@@ -5,7 +5,6 @@ import com.liamcoalstudio.kettle.helpers.Block
 import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.networking.java.play.S2CChunkDataPacket
 import com.liamcoalstudio.kettle.networking.main.Client
-import com.liamcoalstudio.kettle.servers.java.JavaServer
 import com.liamcoalstudio.kettle.servers.main.KettleServer
 import kotlin.math.floor
 
@@ -35,11 +34,11 @@ class Player(val client: Client?, eid: Int) : Entity(eid) {
             val cx = floor(x / 16.0).toInt()
             val cz = floor(z / 16.0).toInt()
             val notInList = MutableList(loadedChunks.size) { loadedChunks[it] }
-            for(x1 in (cx-(renderDistance+2))..(cx+(renderDistance+2)))
-                for(z1 in (cz-(renderDistance+2))..(cz+(renderDistance+2))) {
+            for(x1 in (cx-(renderDistance / 2 + 2))..(cx+(renderDistance / 2 + 2)))
+                for(z1 in (cz-(renderDistance / 2 + 2))..(cz+(renderDistance / 2 + 2))) {
                     if (!loadedChunks.contains(Position(x1.toLong(), 0, z1.toLong())) &&
                         world.isChunkPosValid(Position(x1.toLong(), 0, z1.toLong()))) {
-                        client!!.queuedPackets.add(S2CChunkDataPacket(this, world, x1.toLong(), z1.toLong()))
+                        client!!.send(S2CChunkDataPacket(this, world, x1.toLong(), z1.toLong()))
                         loadedChunks.add(Position(x1.toLong(), 0, z1.toLong()))
                     }
                     notInList.remove(Position(x1.toLong(), 0, z1.toLong()))

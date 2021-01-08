@@ -11,7 +11,7 @@ import com.liamcoalstudio.kettle.servers.main.KettleServer
 
 class C2SClientSettings : Packet(0x05, ClientState.Status.Play), Producer<Packet> {
     var locale: String = ""
-    var viewDistance: Byte = 0
+    var viewDistance: Byte = 2
     var chatMode = 2
     var chatColors = true
     var skinParts: Byte = 0b01111111
