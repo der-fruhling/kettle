@@ -2,6 +2,7 @@ package com.liamcoalstudio.kettle.servers.main
 
 import com.google.gson.Gson
 import com.liamcoalstudio.kettle.helpers.Dimension
+import com.liamcoalstudio.kettle.helpers.KettleProperties
 import com.liamcoalstudio.kettle.helpers.LambdaTimerTask
 import com.liamcoalstudio.kettle.helpers.RecipeUnlockAction
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
@@ -49,6 +50,8 @@ class KettleServer {
 
     @ExperimentalStdlibApi
     fun thread() {
+        KettleProperties.load()
+        KettleProperties.save()
         initObjects()
         initWorlds()
         isFullyInitialized = true
