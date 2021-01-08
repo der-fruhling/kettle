@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.liamcoalstudio.kettle.helpers.serverlist.java.*
 import com.liamcoalstudio.kettle.networking.main.packets.Packet
 import com.liamcoalstudio.kettle.helpers.Buffer
+import com.liamcoalstudio.kettle.helpers.KettleProperties
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.servers.java.JavaServer
 
@@ -11,7 +12,7 @@ class S2CStatusResponsePacket(val serverState: ServerState?) : Packet(0x00, null
     override fun write(buf: Buffer) {
         val json = ServerListJSON()
         json.description = Text()
-        json.description.text = "Kettle Kotlin Test"
+        json.description.text = KettleProperties.motd
         json.players = ServerListPlayerInfo()
         json.players.max = 256
         json.players.online = 0
