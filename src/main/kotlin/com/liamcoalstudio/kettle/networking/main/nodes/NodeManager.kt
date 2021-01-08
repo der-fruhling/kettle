@@ -1,17 +1,21 @@
 package com.liamcoalstudio.kettle.networking.main.nodes
 
 class NodeManager {
-    private val startNodeRead: Node = StartNode()
-    private val endNodeRead: Node = EndNode()
-
-    private val startNodeWrite: Node = StartNode()
-    private val endNodeWrite: Node = EndNode()
+    private val startNode: Node = StartNode()
+    private val compressionNode: Node = CompressionNode()
+    private val endNode: Node = EndNode()
 
     init {
-        startNodeRead.setOutput(endNodeRead)
-        startNodeWrite.setOutput(endNodeWrite)
+        startNode.setOutput(endNode)
     }
 
-    fun putRead(byteArray: ByteArray) = startNodeRead.passThroughRead(byteArray)
-    fun putWrite(byteArray: ByteArray) = startNodeWrite.passThroughWrite(byteArray)
+    fun enableCompression(i: Int) {
+        (compressionNode as CompressionNode).threshold = i
+        startNode.insertAfter(compressionNode)
+    }
+    fun disableCompression() = startNode.setOutput(endNode)
+    fun hasCompression() = startNode.isOutputOf(CompressionNode::class)
+
+    fun putRead(byteArray: ByteArray) = startNode.passThroughRead(byteArray)
+    fun putWrite(byteArray: ByteArray) = startNode.passThroughWrite(byteArray)
 }
