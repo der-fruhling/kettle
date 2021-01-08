@@ -31,5 +31,5 @@ from https://wiki.vg/Protocol_FAQ:
  ✓  S→C: Player Position And Look (Required, tells the client they're ready to spawn)
  ✓  C→S: Teleport Confirm
  ✓  C→S: Player Position And Look (to confirm the spawn position)
-    C→S: Client Status (sent either before or while receiving chunks, further testing needed, server handles correctly if not sent)
+ ✓  C→S: Client Status (sent either before or while receiving chunks, further testing needed, server handles correctly if not sent)
     S→C: inventory, entities, etc
