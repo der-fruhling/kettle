@@ -3,15 +3,19 @@ package com.liamcoalstudio.kettle.servers.main
 import com.google.gson.Gson
 import com.liamcoalstudio.kettle.helpers.Block
 import com.liamcoalstudio.kettle.helpers.Dimension
+import com.liamcoalstudio.kettle.helpers.LambdaTimerTask
 import com.liamcoalstudio.kettle.helpers.RecipeUnlockAction
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
 import com.liamcoalstudio.kettle.networking.java.play.*
 import com.liamcoalstudio.kettle.networking.main.Client
 import com.liamcoalstudio.kettle.servers.java.JavaServer
-import com.liamcoalstudio.kettle.world.Chunk
-import com.liamcoalstudio.kettle.world.Player
-import com.liamcoalstudio.kettle.world.Position
-import com.liamcoalstudio.kettle.world.World
+import com.liamcoalstudio.kettle.world.*
+import net.querz.nbt.io.NBTUtil
+import net.querz.nbt.io.NamedTag
+import net.querz.nbt.tag.CompoundTag
+import net.querz.nbt.tag.IntArrayTag
+import net.querz.nbt.tag.ListTag
+import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.max
@@ -20,7 +24,8 @@ import kotlin.random.Random
 class KettleServer {
     var isFullyInitialized: Boolean = false
     private val executor = QueueExecutor()
-
+    val logger = ConsoleLogger(KettleServer::class)
+    val timer = Timer()
     val worlds = EnumMap<Dimension, World>(Dimension::class.java)
 
     fun execute(runnable: Runnable) {
@@ -37,6 +42,10 @@ class KettleServer {
     private fun initWorlds() {
         val world = World.noise(Random.nextLong())
         worlds[Dimension.OVERWORLD] = world
+
+        timer.scheduleAtFixedRate(LambdaTimerTask {
+            GLOBAL!!.get().saveWorlds()
+        }, 0, 60000)
     }
 
     @ExperimentalStdlibApi
@@ -85,6 +94,26 @@ class KettleServer {
                 0.0f, false,
             ))
         }
+    }
+
+    @ExperimentalStdlibApi
+    fun saveWorlds() {
+        val chunksList = ListTag(IntArrayTag::class.java)
+
+        if(!File("worlds").exists()) File("worlds").mkdir()
+
+        worlds.forEach { (dimension, world) ->
+            logger.info("Saving world $dimension")
+            val nbt = WorldNBTEncoder.encode(world, chunksList)
+            NBTUtil.write(NamedTag("World", nbt), File("worlds/${dimension.name.toLowerCase()}.nbt"), true)
+        }
+
+        logger.info("Saving chunks")
+        val chunkCompound = CompoundTag()
+        chunkCompound.put("ChunkData", chunksList)
+        NBTUtil.write(NamedTag("ChunkInfo", chunkCompound), File("worlds/chunks.nbt"), true)
+
+        logger.info("All done!")
     }
 
     companion object {
