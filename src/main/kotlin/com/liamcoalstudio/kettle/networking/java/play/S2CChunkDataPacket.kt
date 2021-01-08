@@ -9,7 +9,6 @@ import com.liamcoalstudio.kettle.world.*
 import net.querz.nbt.io.NBTSerializer
 import net.querz.nbt.io.NamedTag
 import net.querz.nbt.tag.CompoundTag
-import java.util.concurrent.atomic.AtomicReference
 
 class S2CChunkDataPacket @ExperimentalStdlibApi constructor(
     val player: Player, val world: World, val x: Long, val z: Long
@@ -26,7 +25,7 @@ class S2CChunkDataPacket @ExperimentalStdlibApi constructor(
         val chunkYList = mutableListOf<Long>()
 
         for(i in 0L..15L) {
-            bitmask = bitmask or ((if(world.chunks[Position(x, i, z)]!!.blocks.all { it.value == Block.air }) 0 else 1) shl i.toInt())
+            bitmask = bitmask or ((if(world[Position(x, i, z)].blocks.all { it.value == Block.air }) 0 else 1) shl i.toInt())
             chunkYList.add(i)
         }
 
@@ -45,7 +44,7 @@ class S2CChunkDataPacket @ExperimentalStdlibApi constructor(
             buf.addVarInt(Biome.OCEAN.id)
 
         for(y in chunkYList) {
-            world.chunks[Position(x, y, z)]?.write(cbuf)
+            world[Position(x, y, z)].write(cbuf)
         }
         buf.addVarInt(cbuf.array.size)
         buf.addBuffer(cbuf)
