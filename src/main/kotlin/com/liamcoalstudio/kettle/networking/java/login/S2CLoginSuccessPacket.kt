@@ -6,6 +6,7 @@ import com.liamcoalstudio.kettle.networking.main.packets.ClientState
 import com.liamcoalstudio.kettle.networking.main.packets.Packet
 import com.liamcoalstudio.kettle.helpers.Buffer
 import com.liamcoalstudio.kettle.helpers.Dimension
+import com.liamcoalstudio.kettle.helpers.KettleProperties
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.servers.java.JavaServer
 import com.liamcoalstudio.kettle.world.Biome
@@ -33,7 +34,7 @@ class S2CLoginSuccessPacket(private val username: String) : Packet(0x02, null) {
             client.send(S2CJoinGamePacket(
                 eid = 0,
                 hardcore = false,
-                gamemode = 1,
+                gamemode = KettleProperties.gamemode.toByte(),
                 prevGamemode = -1,
                 worldCount = 1,
                 worlds = arrayOf("minecraft:overworld"),
@@ -45,7 +46,7 @@ class S2CLoginSuccessPacket(private val username: String) : Packet(0x02, null) {
                 isDebug = false,
                 isFlat = false,
                 reducedDebugInfo = false,
-                viewDistance = 32,
+                viewDistance = KettleProperties.viewDistance,
                 worldName = "minecraft:overworld"
             ))
         }
