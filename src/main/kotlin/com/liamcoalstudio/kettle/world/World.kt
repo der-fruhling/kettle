@@ -24,7 +24,7 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
     @ExperimentalStdlibApi
     operator fun set(pos: Position, block: Int) {
         if(chunks[pos / 16] == null)
-            chunks[pos / 16] = Chunk(this, pos / 16)
+            chunks[pos / 16] = if(KettleProperties.flat) Chunk(pos / 16) else Chunk(this, pos / 16)
         val blockPos = pos % 16
         chunks[pos / 16]!!.blocks[blockPos.toChunkPos().short] = block
     }

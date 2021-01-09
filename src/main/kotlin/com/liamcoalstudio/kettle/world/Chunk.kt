@@ -44,6 +44,8 @@ class Chunk(pos: Position) {
         return xzy
     }
 
+    operator fun get(pos: ChunkPos) = blocks[pos.short] ?: -1
+
     val blocks: HashMap<Short, Int> = HashMap()
 
     init {
