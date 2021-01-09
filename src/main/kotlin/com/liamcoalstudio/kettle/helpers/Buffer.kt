@@ -35,6 +35,10 @@ class Buffer() {
         return ret
     }
 
+    private fun peek(size: Int): Array<Byte> {
+        return Array(size) { i -> list[i + readIndex] }
+    }
+
     fun addByte(byte: Byte) = add(BytePacketObject(byte))
     fun addShort(short: Short) = add(ShortPacketObject(short))
     fun addInt(int: Int) = add(IntPacketObject(int))
@@ -62,4 +66,13 @@ class Buffer() {
     fun getBuffer(size: Int) = Buffer(get(size).toByteArray())
     fun getUUID() = UUIDPacketObject(this).obj
     fun getNBTString() = StringPacketObject(this, true).obj
+
+    fun peekByte() = BytePacketObject(peek(1)).obj
+    fun peekShort() = ShortPacketObject(peek(Shorts.BYTES)).obj
+    fun peekInt() = IntPacketObject(peek(Ints.BYTES)).obj
+    fun peekLong() = LongPacketObject(peek(Longs.BYTES)).obj
+    fun peekFloat() = FloatPacketObject(peek(Floats.BYTES)).obj
+    fun peekDouble() = DoublePacketObject(peek(Doubles.BYTES)).obj
+    fun peekBoolean() = BooleanPacketObject(peek(1)).obj
+    fun peekBuffer(size: Int) = Buffer(peek(size).toByteArray())
 }
