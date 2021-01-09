@@ -5,8 +5,6 @@ import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.helpers.KettleProperties
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
 import com.liamcoalstudio.kettle.tasks.Tasks
-import java.time.Instant
-import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.HashMap
 import kotlin.random.Random
@@ -23,10 +21,9 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
 
     @ExperimentalStdlibApi
     operator fun set(pos: Position, block: Int) {
-        if(chunks[pos / 16] == null)
-            chunks[pos / 16] = if(KettleProperties.flat) Chunk(pos / 16) else Chunk(this, pos / 16)
-        val blockPos = pos % 16
-        chunks[pos / 16]!!.blocks[blockPos.toChunkPos().short] = block
+        if(chunks[pos.floorDiv(16)] == null)
+            chunks[pos.floorDiv(16)] = if(KettleProperties.flat) Chunk(pos.floorDiv(16)) else Chunk(this, pos.floorDiv(16))
+        chunks[pos.floorDiv(16)]!!.blocks[pos.toChunkPos().short] = block
     }
 
     @ExperimentalStdlibApi
@@ -54,13 +51,16 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
         logger.info("Generating ${xr.count() * yr.count() * zr.count()} chunks.")
         val runnables = mutableListOf<Runnable>()
         val ref = AtomicReference(this)
+        val times = MutableList(0) { 0L }
         xr.forEach { x ->
             yr.forEach { y ->
                 zr.forEach { z ->
                     runnables.add {
                         ref.getAndUpdate {
-//                            it.logger.info("Generating $x, $y, $z")
+                            val s = System.nanoTime()
                             it[Position(x,y,z)] = if(noise == null) Chunk(Position(x,y,z)) else Chunk(it, Position(x,y,z))
+                            val e = System.nanoTime()
+                            times.add(e - s)
                             it
                         }
                     }
@@ -69,9 +69,10 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
         }
         logger.info("Async array created, executing")
         val start = System.nanoTime()
-        Tasks.executeAllAsync(*runnables.toTypedArray()).await()
+        Tasks.executeAll(*runnables.toTypedArray())/*.await()*/
         val end = System.nanoTime()
         logger.info("Took ${(end - start).toDouble() / 1000000.0}ms to generate ${xr.count() * yr.count() * zr.count()} chunks.")
+        logger.info("Average time: ${times.average() / 1000000000.0}s")
     }
 
     fun getNoise(x: Long, bx: Byte, y: Long, by: Byte, z: Long, bz: Byte, index: Float) =
@@ -92,21 +93,17 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
         }
 
     companion object {
-
         @ExperimentalStdlibApi
         fun noise(seed: Long): World {
             val world = World(Dimension.OVERWORLD, FastNoiseLite(seed.toInt()))
             world.noise!!.SetNoiseType(FastNoiseLite.NoiseType.Perlin)
             world.seed = seed
-            world.generateChunkRange(-32L..32L, 0L..15L, -32L..32L)
             return world
         }
 
         @ExperimentalStdlibApi
         fun flat(): World {
-            val world = World(Dimension.OVERWORLD, null)
-            world.generateChunkRange(-32L..32L, 0L..15L, -32L..32L)
-            return world
+            return World(Dimension.OVERWORLD, null)
         }
     }
 }

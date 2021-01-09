@@ -22,6 +22,7 @@ class C2SBlockPlacement : Packet(0x2e, ClientState.Status.Play), Producer<Packet
     var cursorZ by Delegates.notNull<Float>()
     var insideBlock by Delegates.notNull<Boolean>()
 
+    @ExperimentalUnsignedTypes
     override fun read(buf: Buffer) {
         hand = buf.getVarInt()
         location = Position.read(buf)
