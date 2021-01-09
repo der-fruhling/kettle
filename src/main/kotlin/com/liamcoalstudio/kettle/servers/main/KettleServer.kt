@@ -87,6 +87,7 @@ class KettleServer {
             client.send(S2CSpawnPosition())
             client.send(S2CEntityStatus(player.eid, 23))
             client.send(S2CEntityStatus(player.eid, 28))
+            client.send(S2CWindowItems(0, player.inventory.toTypedArray()))
             client.send(S2CPlayerPosAndLook(
                 KettleProperties.spawn.x, false,
                 KettleProperties.spawn.y, false,
