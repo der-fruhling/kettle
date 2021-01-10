@@ -110,5 +110,10 @@
             <artifactId>NBT</artifactId>
             <version>5.5</version>
         </dependency>
+        <dependency>
+            <groupId>com.liamcoalstudio</groupId>
+            <artifactId>kwl</artifactId>
+            <version>1.0</version>
+        </dependency>
     </dependencies>
 </project>

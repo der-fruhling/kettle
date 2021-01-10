@@ -21,7 +21,7 @@ packets (mostly https://wiki.vg/Protocol_FAQ):
  !  S→C: Set Compression (Optional, enables compression) [branch: compression]
  ✓  S→C: Login Success
  ✓  S→C: Join Game
- →  S→C: Plugin Message: minecraft:brand with the server's brand (Optional)
+ -  S→C: Plugin Message: minecraft:brand with the server's brand (Optional)
     S→C: Server Difficulty (Optional)
     S→C: Player Abilities (Optional)
     C→S: Plugin Message: minecraft:brand with the client's brand (Optional)
@@ -45,12 +45,12 @@ packets (mostly https://wiki.vg/Protocol_FAQ):
  ✓  C→S: Player Position And Look (to confirm the spawn position)
  ✓  C→S: Client Status (sent either before or while receiving chunks, further testing needed, server handles correctly if not sent)
 
- !  C→S: Player Block Placement [branch: blocks]
- !  C→S: Player Digging [branch: blocks]
+ ✓  C→S: Player Block Placement [branch: blocks]
+    C→S: Player Digging [branch: blocks]
     S→C: Entity ...
     ...
 
 use KWL, instead of the stuff built into kettle:
- -  Needs position reading and writing (both Location and Position) [requires every other branch merged]
+ →  Needs position reading and writing (both Location and Position) [requires every other branch merged]
     Needs position math
     ...
