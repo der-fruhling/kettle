@@ -1,4 +1,16 @@
-from https://wiki.vg/Protocol_FAQ:
+TODO:  17 packets
+FIXME: 1 packet
+
+Format:
+ ✓  Finished
+ →  Next
+ -  Cannot be worked on right now.
+ ~  Needs more testing
+ =  Incomplete
+ !  Worked on in another branch
+    Nothing
+
+packets (mostly https://wiki.vg/Protocol_FAQ):
  ✓  Client connects to server
  ✓  C→S: Handshake State=2
  ✓  C→S: Login Start
@@ -6,10 +18,10 @@ from https://wiki.vg/Protocol_FAQ:
     Client auth
     C→S: Encryption Response
     Server auth, both enable encryption
-    S→C: Set Compression (Optional, enables compression)
+ !  S→C: Set Compression (Optional, enables compression) [branch: compression]
  ✓  S→C: Login Success
  ✓  S→C: Join Game
-    S→C: Plugin Message: minecraft:brand with the server's brand (Optional)
+ →  S→C: Plugin Message: minecraft:brand with the server's brand (Optional)
     S→C: Server Difficulty (Optional)
     S→C: Player Abilities (Optional)
     C→S: Plugin Message: minecraft:brand with the client's brand (Optional)
@@ -32,4 +44,13 @@ from https://wiki.vg/Protocol_FAQ:
  ✓  C→S: Teleport Confirm
  ✓  C→S: Player Position And Look (to confirm the spawn position)
  ✓  C→S: Client Status (sent either before or while receiving chunks, further testing needed, server handles correctly if not sent)
-    S→C: inventory, entities, etc
+
+ !  C→S: Player Block Placement [branch: blocks]
+ !  C→S: Player Digging [branch: blocks]
+    S→C: Entity ...
+    ...
+
+use KWL, instead of the stuff built into kettle:
+ -  Needs position reading and writing (both Location and Position) [requires every other branch merged]
+    Needs position math
+    ...
