@@ -33,3 +33,8 @@ from https://wiki.vg/Protocol_FAQ:
  ✓  C→S: Player Position And Look (to confirm the spawn position)
  ✓  C→S: Client Status (sent either before or while receiving chunks, further testing needed, server handles correctly if not sent)
     S→C: inventory, entities, etc
+
+use KWL, instead of the stuff built into kettle:
+ →  Needs position reading and writing (both Location and Position)
+    Needs position math
+    ...
