@@ -28,6 +28,8 @@ class Player(val client: Client?, eid: Int) : Entity(eid) {
     val actions = HashMap<Int, Action>()
     val loadedChunks = mutableListOf<Position>()
 
+    val inventory = MutableList(46) { Slot() }
+
     @ExperimentalStdlibApi
     fun updateChunks() =
         Thread {
