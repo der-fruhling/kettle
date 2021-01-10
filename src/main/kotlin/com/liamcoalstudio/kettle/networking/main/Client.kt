@@ -18,7 +18,7 @@ class Client(val socketChannel: AsynchronousSocketChannel) {
     private val socketChannelReference  = AtomicReference(socketChannel)
     var status                          = ClientState.Status.Handshake
     private val buffer                  = ByteBuffer.allocate(65535)
-    private val nodeManager             = NodeManager()
+    val nodeManager                     = NodeManager()
     private val logger                  = ConsoleLogger(Client::class)
     val queuedPackets                   = mutableListOf<Packet>()
     var closing                         = false
@@ -43,25 +43,24 @@ class Client(val socketChannel: AsynchronousSocketChannel) {
     private fun readFromThread(size: Int, buffer: AtomicReference<ByteBuffer>) {
         val buf = buffer.get().flip()
         if(!buf.hasRemaining()) return
-        val pbuf = Buffer()
-        pbuf.array = nodeManager.putRead(buf.array().slice(0 until buf.limit()).toByteArray())
-        while(pbuf.hasMore) {
-            val length = pbuf.getVarInt()
-            if(length > pbuf.bytesLeft || length <= 0) break
-            val sbuf = pbuf.getBuffer(length)
-            val id = sbuf.getVarInt()
-            val packet = JavaPacket.fromIdAndState(status, id)
-            if(packet == null) {
-                logger.error("${id.toString(16).padStart(2, '0')} wasn't found in $status")
-            } else {
-                val state = JavaServer.GLOBAL.state
-                val pkt = packet.producer.produce(state)
-                pkt.read(sbuf)
-                pkt.updateOnRead(state, this)
-            }
-        }
         buffer.get().clear()
         JavaServer.GLOBAL_CONTROLLER!!.get().execute {
+            val pbuf = Buffer()
+            pbuf.array = nodeManager.putRead(buf.array().slice(0 until buf.limit()).toByteArray())
+            while(pbuf.hasMore) {
+                val length = pbuf.getVarInt()
+                if(length > pbuf.bytesLeft || length <= 0) break
+                val id = pbuf.getVarInt()
+                val packet = JavaPacket.fromIdAndState(status, id)
+                if(packet == null) {
+                    logger.error("$id wasn't found in $status")
+                } else {
+                    val state = JavaServer.GLOBAL.state
+                    val pkt = packet.producer.produce(state)
+                    pkt.read(pbuf)
+                    pkt.updateOnRead(state, this)
+                }
+            }
             socketChannelReference.get().read(buffer.get(), buffer, CompletionHandler(this::readFromThread))
         }
     }
@@ -80,10 +79,6 @@ class Client(val socketChannel: AsynchronousSocketChannel) {
                 packet.updateOnWrite(JavaServer.GLOBAL.state, this)
             }
             write(Buffer(nodeManager.putWrite(output.array)))
-
-            val tbuf = Buffer()
-            tbuf.addVarInt(data.array.size)
-            val rbuf = Buffer(tbuf.array)
         }
     }
 
@@ -97,7 +92,7 @@ class Client(val socketChannel: AsynchronousSocketChannel) {
         }
 
         override fun failed(exc: Throwable?, attachment: AtomicReference<ByteBuffer>?) {
-            TODO("not implemented")
+            exc!!.printStackTrace()
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.liamcoalstudio.kettle.networking.main.nodes
 
 class StartNode : Node() {
-    override fun pass(input: ByteArray) = input
+    override fun passWrite(input: ByteArray) = input
+    override fun passRead(input: ByteArray) = input
 }
