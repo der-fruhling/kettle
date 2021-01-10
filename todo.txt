@@ -4,6 +4,7 @@ FIXME: 1 packet
 Format:
  ✓  Finished
  →  Next
+ -  Cannot be worked on right now.
  ~  Needs more testing
  =  Incomplete
  !  Worked on in another branch
@@ -50,6 +51,6 @@ packets (mostly https://wiki.vg/Protocol_FAQ):
     ...
 
 use KWL, instead of the stuff built into kettle:
- →  Needs position reading and writing (both Location and Position)
+ -  Needs position reading and writing (both Location and Position) [requires every other branch merged]
     Needs position math
     ...
