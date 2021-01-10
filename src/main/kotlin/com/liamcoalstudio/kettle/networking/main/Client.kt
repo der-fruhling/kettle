@@ -92,7 +92,7 @@ class Client(val socketChannel: AsynchronousSocketChannel) {
         }
 
         override fun failed(exc: Throwable?, attachment: AtomicReference<ByteBuffer>?) {
-            TODO("not implemented")
+            exc!!.printStackTrace()
         }
     }
 }

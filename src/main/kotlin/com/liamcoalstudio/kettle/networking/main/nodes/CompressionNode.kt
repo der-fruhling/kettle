@@ -12,7 +12,7 @@ class CompressionNode : Node() {
     override fun passWrite(input: ByteArray): ByteArray {
         val bufi = Buffer(input)
         val size = bufi.getVarInt()
-        return if(size >= threshold && threshold != 0) {
+        return if(threshold in 1..size) {
             val out = ByteArrayOutputStream()
             val bytes = DeflaterOutputStream(out)
 
@@ -46,8 +46,9 @@ class CompressionNode : Node() {
         val size = bufi.getVarInt()
         val buf = bufi.getBuffer(size)
         val usize = buf.getVarInt()
+        val bytesLeft = size - (size - buf.bytesLeft)
         return if(usize > 0) {
-            val compressed = buf.getBuffer(buf.bytesLeft).array
+            val compressed = buf.getBuffer(bytesLeft).array
 
             println(compressed.contentToString())
             val out = ByteArrayOutputStream()
@@ -62,7 +63,10 @@ class CompressionNode : Node() {
             outbuf.addBuffer(Buffer(outbytes))
             outbuf.array
         } else {
-            bufi.getBuffer(usize).array
+            val outbuf = Buffer()
+            outbuf.addVarInt(bytesLeft)
+            outbuf.addBuffer(buf.getBuffer(bytesLeft))
+            outbuf.array
         }
     }
 }

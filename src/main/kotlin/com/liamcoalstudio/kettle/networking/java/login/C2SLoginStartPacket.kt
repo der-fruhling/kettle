@@ -13,11 +13,11 @@ class C2SLoginStartPacket : Packet(0x00, ClientState.Status.Login), Producer<Pac
     }
 
     override fun updateOnRead(state: ServerState, client: Client) {
+        client.send(S2CSetCompression(512))
         JavaServer.GLOBAL_CONTROLLER!!.get().execute {
-            client.send(S2CSetCompression(512))
             client.nodeManager.enableCompression(512)
-            client.send(S2CLoginSuccessPacket(username))
         }
+        client.send(S2CLoginSuccessPacket(username))
     }
 
     override fun produce(serverState: ServerState) = C2SLoginStartPacket()
