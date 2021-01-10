@@ -17,11 +17,9 @@ class TeleportAction(val player: Player,
             player.z = z
             player.yaw = yaw
             player.pitch = pitch
-            JavaServer.GLOBAL_CONTROLLER!!.get().execute {
-                player.client!!.send(S2CUpdateViewPosition(floor(x / 16.0).toInt(), floor(z / 16.0).toInt()))
-                player.updateChunks().start()
-            }
         }
+        player.client!!.send(S2CUpdateViewPosition(floor(x / 16.0).toInt(), floor(z / 16.0).toInt()))
+        player.updateChunks().start()
     }
 
     override val fields: HashMap<String, Any>

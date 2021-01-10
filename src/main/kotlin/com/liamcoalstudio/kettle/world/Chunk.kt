@@ -39,10 +39,12 @@ class Chunk(pos: Position) {
 
     private fun xzy(): MutableList<Int> {
         val xzy = mutableListOf<Int>()
-        for(y in 0..15) for(z in 0..15) for(x in 0..15)
+        for(y in 0..15) for(z in 0..15) for(x in 15 downTo 0)
             xzy.add(blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short]!!)
         return xzy
     }
+
+    operator fun get(pos: ChunkPos) = blocks[pos.short] ?: -1
 
     val blocks: HashMap<Short, Int> = HashMap()
 

@@ -48,14 +48,15 @@ class Client(val socketChannel: AsynchronousSocketChannel) {
         while(pbuf.hasMore) {
             val length = pbuf.getVarInt()
             if(length > pbuf.bytesLeft || length <= 0) break
-            val id = pbuf.getVarInt()
+            val sbuf = pbuf.getBuffer(length)
+            val id = sbuf.getVarInt()
             val packet = JavaPacket.fromIdAndState(status, id)
             if(packet == null) {
-                logger.error("$id wasn't found in $status")
+                logger.error("${id.toString(16).padStart(2, '0')} wasn't found in $status")
             } else {
                 val state = JavaServer.GLOBAL.state
                 val pkt = packet.producer.produce(state)
-                pkt.read(pbuf)
+                pkt.read(sbuf)
                 pkt.updateOnRead(state, this)
             }
         }

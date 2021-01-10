@@ -18,7 +18,9 @@ enum class JavaPacket(val clientState: ClientState.Status, val id: Int, val prod
     PPlayerR(Play, 0x14, C2SPlayerRot()),
     PPlayerP(Play, 0x12, C2SPlayerPos()),
     PClientSettings(Play, 0x05, C2SClientSettings()),
-    PCreativeInventoryAction(Play, 0x28, C2SCreativeInventoryAction())
+    PBlockPlace(Play, 0x2e, C2SBlockPlacement()),
+    PCreativeInventoryAction(Play, 0x28, C2SCreativeInventoryAction()),
+
     ;
 
     companion object {

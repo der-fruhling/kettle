@@ -49,8 +49,4 @@ class S2CChunkDataPacket @ExperimentalStdlibApi constructor(
 
         buf.addVarInt(0)
     }
-
-    override fun updateOnWrite(state: ServerState, client: Client) {
-        super.updateOnWrite(state, client)
-    }
 }
