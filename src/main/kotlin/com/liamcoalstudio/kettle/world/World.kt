@@ -1,12 +1,15 @@
 package com.liamcoalstudio.kettle.world
 
 import FastNoiseLite
+import com.liamcoalstudio.kettle.helpers.Block
+import com.liamcoalstudio.kettle.helpers.ChunkPos
 import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.helpers.KettleProperties
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
 import com.liamcoalstudio.kettle.tasks.Tasks
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.collections.HashMap
+import kotlin.math.floor
 import kotlin.random.Random
 
 class World(val dimension: Dimension, val noise: FastNoiseLite?) {
@@ -20,11 +23,7 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
 
 
     @ExperimentalStdlibApi
-    operator fun set(pos: Position, block: Int) {
-        if(chunks[pos.floorDiv(16)] == null)
-            chunks[pos.floorDiv(16)] = if(KettleProperties.flat) Chunk(pos.floorDiv(16)) else Chunk(this, pos.floorDiv(16))
-        chunks[pos.floorDiv(16)]!!.blocks[pos.toChunkPos().short] = block
-    }
+    operator fun set(pos: Position, block: Int) = setBlockAt(pos, block)
 
     @ExperimentalStdlibApi
     operator fun set(pos: Position, chunk: Chunk) {
@@ -91,6 +90,30 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
                 }
             }
         }
+
+    @ExperimentalStdlibApi
+    fun getBlockAt(pos: Position): Int {
+        val (dpos, mpos) = posToPoses(pos)
+        return this[dpos][mpos];
+    }
+
+    @ExperimentalStdlibApi
+    fun setBlockAt(pos: Position, block: Int) {
+        val (dpos, mpos) = posToPoses(pos)
+        this[dpos][mpos] = block
+    }
+
+    private fun posToPoses(pos: Position): Pair<Position, ChunkPos> {
+        val dpos = Position(
+            floor(pos.x.toDouble() / 16.0).toLong(),
+            floor(pos.y.toDouble() / 16.0).toLong(),
+            floor(pos.z.toDouble() / 16.0).toLong())
+        val mpos = Position(
+            floor(pos.x.toDouble() % 16.0).toLong(),
+            floor(pos.y.toDouble() % 16.0).toLong(),
+            floor(pos.z.toDouble() % 16.0).toLong()).toChunkPos()
+        return Pair(dpos, mpos);
+    }
 
     companion object {
         @ExperimentalStdlibApi

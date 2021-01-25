@@ -20,7 +20,7 @@ enum class JavaPacket(val clientState: ClientState.Status, val id: Int, val prod
     PClientSettings(Play, 0x05, C2SClientSettings()),
     PBlockPlace(Play, 0x2e, C2SBlockPlacement()),
     PCreativeInventoryAction(Play, 0x28, C2SCreativeInventoryAction()),
-
+    PBlockDigging(Play, 0x1b, C2SBlockDigging()),
     ;
 
     companion object {

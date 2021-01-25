@@ -5,7 +5,7 @@ import com.liamcoalstudio.kettle.helpers.ChunkPos
 import kotlin.math.floor
 import kotlin.math.pow
 
-data class Position(val x: Long, val y: Long, val z: Long) {
+data class Position(var x: Long, var y: Long, var z: Long) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Position) return false

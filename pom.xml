@@ -19,6 +19,10 @@
 
     <repositories>
         <repository>
+            <id>liamServer</id>
+            <url>http://www.liamiam.com/repository/maven-public/</url>
+        </repository>
+        <repository>
             <id>mavenCentral</id>
             <url>https://repo1.maven.org/maven2/</url>
         </repository>
@@ -109,11 +113,6 @@
             <groupId>com.github.Querz</groupId>
             <artifactId>NBT</artifactId>
             <version>5.5</version>
-        </dependency>
-        <dependency>
-            <groupId>com.liamcoalstudio</groupId>
-            <artifactId>kwl</artifactId>
-            <version>1.0</version>
         </dependency>
     </dependencies>
 </project>
