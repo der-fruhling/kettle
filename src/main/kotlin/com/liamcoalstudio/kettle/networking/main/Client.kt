@@ -41,6 +41,7 @@ class Client(val socketChannel: AsynchronousSocketChannel) {
     }
 
     private fun readFromThread(size: Int, buffer: AtomicReference<ByteBuffer>) {
+        while(this.buffer.position() < size) Thread.onSpinWait()
         val buf = buffer.get().flip()
         if(!buf.hasRemaining()) return
         buffer.get().clear()
