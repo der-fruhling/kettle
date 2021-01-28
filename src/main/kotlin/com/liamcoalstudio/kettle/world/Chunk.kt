@@ -3,7 +3,6 @@ package com.liamcoalstudio.kettle.world
 import com.liamcoalstudio.kettle.helpers.Block
 import com.liamcoalstudio.kettle.helpers.Buffer
 import com.liamcoalstudio.kettle.helpers.ChunkPos
-import com.liamcoalstudio.kettle.logging.ConsoleLogger
 import kotlin.math.floor
 
 @ExperimentalStdlibApi
@@ -50,12 +49,12 @@ class Chunk(pos: Position) {
     val blocks: HashMap<Short, Int> = HashMap()
 
     init {
-        val layers = arrayOf(Block.bedrock, Block.dirt, Block.dirt, Block.grass_block)
+        val layers = arrayOf(Block.Bedrock, Block.Dirt, Block.Dirt, Block.GrassBlock)
         for (x in 0..15) for (y in 0..15) for (z in 0..15) {
             if(y < 4 && pos.y == 0L)
-                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = layers[y]
+                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = layers[y].id
             else
-                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.air
+                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.Air.id
         }
     }
 
@@ -63,9 +62,9 @@ class Chunk(pos: Position) {
         val heightMap = world.heightMap(pos.x, pos.y, pos.z)
         for (x in 0..15) for (y in 0..15) for (z in 0..15) {
             if(heightMap[x][y][z] > 8.0)
-                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.stone
+                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.Stone.id
             else
-                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.air
+                blocks[ChunkPos(x.toByte(), y.toByte(), z.toByte()).short] = Block.Air.id
         }
     }
 }

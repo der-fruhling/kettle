@@ -1,6 +1,3 @@
-TODO:  17 packets
-FIXME: 1 packet
-
 Format:
  ✓  Finished
  →  Next
@@ -48,9 +45,5 @@ packets (mostly https://wiki.vg/Protocol_FAQ):
  ✓  C→S: Player Block Placement [branch: blocks]
     C→S: Player Digging [branch: blocks]
     S→C: Entity ...
-    ...
-
-use KWL, instead of the stuff built into kettle:
- →  Needs position reading and writing (both Location and Position) [requires every other branch merged]
-    Needs position math
-    ...
+ ✓  C→S: Change Held Item [branch: place-held-item]
+ ✓  C→S: Creative Inventory Action [branch: place-held-item]

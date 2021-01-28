@@ -35,8 +35,11 @@ class C2SBlockPlacement : Packet(0x2e, ClientState.Status.Play), Producer<Packet
 
     @ExperimentalStdlibApi
     override fun updateOnRead(state: ServerState, client: Client) {
-        KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!![location] = Block.stone
-        ConsoleLogger(C2SBlockPlacement::class).info("Modify $location = ${KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!![location][location.toChunkPos()]}")
+        val player = KettleServer.player(client)
+        if(player.inventory[player.selected + 36].block != null) {
+            KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!![location] = player.inventory[player.selected + 36].block!!
+            ConsoleLogger(C2SBlockPlacement::class).info("Modify $location = ${KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!![location][location.toChunkPos()]}")
+        }
     }
 
     override fun produce(serverState: ServerState) = C2SBlockPlacement()

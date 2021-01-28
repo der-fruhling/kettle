@@ -30,7 +30,7 @@ class C2SBlockDigging : Packet(0x1b, ClientState.Status.Play), Producer<Packet> 
         val world = KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!
         val player = world.players.find { it.client == client }!!
         when(status) {
-            0, 2 -> world.setBlockAt(location!!, Block.air)
+            0, 2 -> world.setBlockAt(location!!, Block.Air)
         }
         ConsoleLogger(C2SBlockDigging::class).info("Modify $location = ${KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!.getBlockAt(location!!)}")
 
