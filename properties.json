@@ -1,12 +1,11 @@
 {
-  "motd": "Cat",
+  "motd": "Kettle Server!",
   "viewDistance": 4,
   "gamemode": 1,
   "flat": true,
   "spawn": {
     "x": 0.0,
     "y": 4.0,
-
     "z": 0.0
   }
 }
