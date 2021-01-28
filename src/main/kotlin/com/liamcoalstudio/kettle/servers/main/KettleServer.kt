@@ -18,6 +18,7 @@ import net.querz.nbt.tag.ListTag
 import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.collections.HashMap
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -65,9 +66,7 @@ class KettleServer {
     }
 
     private fun initObjects() {
-        BLOCKS = HashMap()
-        BLOCKS = Gson().fromJson(JavaServer::class.java.getResource("/blocks.json").openStream().reader(),
-            BLOCKS.javaClass)
+
     }
 
     @ExperimentalStdlibApi
@@ -87,7 +86,7 @@ class KettleServer {
             client.send(S2CSpawnPosition())
             client.send(S2CEntityStatus(player.eid, 23))
             client.send(S2CEntityStatus(player.eid, 28))
-            client.send(S2CWindowItems(0, player.inventory.toTypedArray()))
+            client.send(S2CWindowItems(0, player.inventory))
             client.send(S2CPlayerPosAndLook(
                 KettleProperties.spawn.x, false,
                 KettleProperties.spawn.y, false,
@@ -118,9 +117,12 @@ class KettleServer {
         logger.info("All done!")
     }
 
+    fun player(client: Client) = worlds[Dimension.OVERWORLD]!!.players.find { it.client == client }!!
+
     companion object {
         var GLOBAL: AtomicReference<KettleServer>? = AtomicReference(KettleServer())
         lateinit var THREAD: AtomicReference<Thread>
-        lateinit var BLOCKS: HashMap<String, Int>
+
+        fun player(client: Client) = GLOBAL!!.get().player(client)
     }
 }

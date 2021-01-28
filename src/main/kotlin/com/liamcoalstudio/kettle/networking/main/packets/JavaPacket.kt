@@ -21,6 +21,7 @@ enum class JavaPacket(val clientState: ClientState.Status, val id: Int, val prod
     PBlockPlace(Play, 0x2e, C2SBlockPlacement()),
     PCreativeInventoryAction(Play, 0x28, C2SCreativeInventoryAction()),
     PBlockDigging(Play, 0x1b, C2SBlockDigging()),
+    PHeldItemChange(Play, 0x25, C2SHeldItemChange())
     ;
 
     companion object {

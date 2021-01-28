@@ -11,6 +11,7 @@ import kotlin.math.floor
 class Player(val client: Client?, eid: Int) : Entity(eid) {
     constructor() : this(null, -1)
 
+    @Volatile var selected: Int = 0
     var renderDistance: Int = 2
     var x: Double = 0.0
     var y: Double = 64.0
@@ -28,7 +29,7 @@ class Player(val client: Client?, eid: Int) : Entity(eid) {
     val actions = HashMap<Int, Action>()
     val loadedChunks = mutableListOf<Position>()
 
-    val inventory = MutableList(46) { Slot() }
+    @Volatile var inventory = Array(46) { Slot() }
 
     @ExperimentalStdlibApi
     fun updateChunks() =
@@ -53,6 +54,13 @@ class Player(val client: Client?, eid: Int) : Entity(eid) {
         val list = mutableListOf<Chunk>()
         for(i in 0L..15L)
             list.add(world[Position(x.toLong(), i, z.toLong())])
-        return list.all { chunk -> chunk.blocks.all { it.value == Block.air } }
+        return list.all { chunk -> chunk.blocks.all { it.value == Block.Air.id } }
+    }
+
+    @ExperimentalStdlibApi
+    fun updateChunksRun() {
+        val t = updateChunks()
+        t.start()
+        t.join()
     }
 }

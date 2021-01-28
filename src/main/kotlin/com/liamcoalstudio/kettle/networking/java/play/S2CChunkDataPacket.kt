@@ -2,9 +2,7 @@ package com.liamcoalstudio.kettle.networking.java.play
 
 import com.liamcoalstudio.kettle.helpers.Block
 import com.liamcoalstudio.kettle.helpers.Buffer
-import com.liamcoalstudio.kettle.networking.main.Client
 import com.liamcoalstudio.kettle.networking.main.packets.Packet
-import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.world.*
 import net.querz.nbt.io.NBTSerializer
 import net.querz.nbt.io.NamedTag
@@ -25,7 +23,7 @@ class S2CChunkDataPacket @ExperimentalStdlibApi constructor(
         val chunkYList = mutableListOf<Long>()
 
         for(i in 0L..15L) {
-            bitmask = bitmask or ((if(world[Position(x, i, z)].blocks.all { it.value == Block.air }) 0 else 1) shl i.toInt())
+            bitmask = bitmask or ((if(world[Position(x, i, z)].blocks.all { it.value == Block.Air.id }) 0 else 1) shl i.toInt())
             chunkYList.add(i)
         }
 

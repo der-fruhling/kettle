@@ -26,6 +26,9 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
     operator fun set(pos: Position, block: Int) = setBlockAt(pos, block)
 
     @ExperimentalStdlibApi
+    operator fun set(pos: Position, block: Block) = setBlockAt(pos, block)
+
+    @ExperimentalStdlibApi
     operator fun set(pos: Position, chunk: Chunk) {
         chunks[pos] = chunk
     }
@@ -102,6 +105,9 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
         val (dpos, mpos) = posToPoses(pos)
         this[dpos][mpos] = block
     }
+
+    @ExperimentalStdlibApi
+    fun setBlockAt(pos: Position, block: Block) = setBlockAt(pos, block.id)
 
     private fun posToPoses(pos: Position): Pair<Position, ChunkPos> {
         val dpos = Position(
