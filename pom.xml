@@ -6,7 +6,7 @@
 
     <artifactId>kettle</artifactId>
     <groupId>com.liamcoalstudio</groupId>
-    <version>0.0000+754</version>
+    <version>0.00.0</version>
     <packaging>jar</packaging>
 
     <name>kettle</name>
@@ -85,6 +85,11 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>com.liamcoalstudio.kettle.MainKt</mainClass>
+                        </manifest>
+                    </archive>
                     <descriptorRefs>
                         <descriptorRef>jar-with-dependencies</descriptorRef>
                     </descriptorRefs>
