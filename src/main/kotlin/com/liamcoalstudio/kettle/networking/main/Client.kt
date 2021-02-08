@@ -75,10 +75,7 @@ class Client(val socketChannel: AsynchronousSocketChannel) {
             val output = Buffer()
             output.addVarInt(data.array.size)
             output.addBuffer(data)
-
-            KettleServer.GLOBAL!!.get().execute {
-                packet.updateOnWrite(JavaServer.GLOBAL.state, this)
-            }
+            packet.updateOnWrite(JavaServer.GLOBAL.state, this)
             write(Buffer(nodeManager.putWrite(output.array)))
         }
     }

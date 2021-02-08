@@ -16,7 +16,9 @@ class C2SHeldItemChange : Packet(0x25, ClientState.Status.Play), Producer<Packet
     }
 
     override fun updateOnRead(state: ServerState, client: Client) {
-        KettleServer.player(client).selected = slot
+        KettleServer.GLOBAL!!.get().execute {
+            KettleServer.player(client).selected = slot
+        }
     }
 
     override fun produce(serverState: ServerState): Packet = C2SHeldItemChange()

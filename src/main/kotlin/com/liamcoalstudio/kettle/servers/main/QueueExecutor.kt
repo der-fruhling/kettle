@@ -5,21 +5,17 @@ import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicReference
 
 class QueueExecutor : Executor {
-    private val queue: AtomicReference<Queue<Runnable>> = AtomicReference(LinkedList())
+    @Volatile
+    private var queue: Queue<Runnable> = LinkedList()
 
     @Synchronized
     override fun execute(command: Runnable) {
-        queue.getAndUpdate {
-            it.offer(command)
-            it
-        }
+        queue.offer(command)
     }
 
     @Synchronized
     fun run() {
-        val a = queue.get()
-        while(a.peek() != null)
-            a.poll().run()
-        queue.get().clear()
+        while(queue.peek() != null)
+            queue.poll().run()
     }
 }

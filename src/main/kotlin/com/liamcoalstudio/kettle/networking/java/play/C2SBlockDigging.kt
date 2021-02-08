@@ -27,13 +27,13 @@ class C2SBlockDigging : Packet(0x1b, ClientState.Status.Play), Producer<Packet> 
 
     @ExperimentalStdlibApi
     override fun updateOnRead(state: ServerState, client: Client) {
-        val world = KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!
-        val player = world.players.find { it.client == client }!!
-        when(status) {
-            0, 2 -> world.setBlockAt(location!!, Block.Air)
+        KettleServer.GLOBAL!!.get().execute {
+            val world = KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!
+            when(status) {
+                0, 2 -> world.setBlockAt(location!!, Block.Air)
+            }
+            ConsoleLogger(C2SBlockDigging::class).info("Modify $location = ${KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!.getBlockAt(location!!)}")
         }
-        ConsoleLogger(C2SBlockDigging::class).info("Modify $location = ${KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!.getBlockAt(location!!)}")
-
     }
 
     override fun produce(serverState: ServerState) = C2SBlockDigging()
