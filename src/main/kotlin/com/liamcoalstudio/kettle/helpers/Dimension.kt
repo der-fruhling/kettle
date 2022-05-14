@@ -38,25 +38,25 @@ enum class Dimension(
     );
 
     val codec: CompoundTag
-    get() {
-        val compound = CompoundTag()
-        compound.putString("name", dimName)
-        compound.putInt("id", id)
-        val element = CompoundTag()
-        element.putBoolean("piglin_safe", piglinSafe)
-        element.putBoolean("natural", natural)
-        element.putFloat("ambient_light", ambientLight)
-        element.putString("infiniburn", infiniburnTag)
-        element.putBoolean("respawn_anchor_works", respawnAnchorWorks)
-        element.putBoolean("has_skylight", hasSkylight)
-        element.putBoolean("bed_works", bedWorks)
-        element.putString("effects", effectsId)
-        element.putBoolean("has_raids", hasRaids)
-        element.putInt("logical_height", logicalHeight)
-        element.putDouble("coordinate_scale", coordinateScale)
-        element.putBoolean("ultrawarm", ultrawarm)
-        element.putBoolean("has_ceiling", hasCeiling)
-        compound.put("element", element)
-        return compound
-    }
+        get() {
+            val compound = CompoundTag()
+            compound.putString("name", dimName)
+            compound.putInt("id", id)
+            val element = CompoundTag()
+            element.putBoolean("piglin_safe", piglinSafe)
+            element.putBoolean("natural", natural)
+            element.putFloat("ambient_light", ambientLight)
+            element.putString("infiniburn", infiniburnTag)
+            element.putBoolean("respawn_anchor_works", respawnAnchorWorks)
+            element.putBoolean("has_skylight", hasSkylight)
+            element.putBoolean("bed_works", bedWorks)
+            element.putString("effects", effectsId)
+            element.putBoolean("has_raids", hasRaids)
+            element.putInt("logical_height", logicalHeight)
+            element.putDouble("coordinate_scale", coordinateScale)
+            element.putBoolean("ultrawarm", ultrawarm)
+            element.putBoolean("has_ceiling", hasCeiling)
+            compound.put("element", element)
+            return compound
+        }
 }

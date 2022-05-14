@@ -1,5 +1,6 @@
-package com.liamcoalstudio.kettle.helpers.serverlist.java;
+package com.liamcoalstudio.kettle.helpers.serverlist
 
-public class Text {
-    public String text;
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Text(var text: String)

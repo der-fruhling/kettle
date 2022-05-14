@@ -1,6 +1,5 @@
 package com.liamcoalstudio.kettle.networking.java.play
 
-import com.liamcoalstudio.kettle.helpers.Block
 import com.liamcoalstudio.kettle.helpers.Buffer
 import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
@@ -37,8 +36,9 @@ class C2SBlockPlacement : Packet(0x2e, ClientState.Status.Play), Producer<Packet
     override fun updateOnRead(state: ServerState, client: Client) {
         KettleServer.GLOBAL!!.get().execute {
             val player = KettleServer.player(client)
-            if(player.inventory[player.selected + 36].block != null) {
-                KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!![location] = player.inventory[player.selected + 36].block!!
+            if (player.inventory[player.selected + 36].block != null) {
+                KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!![location] =
+                    player.inventory[player.selected + 36].block!!
                 ConsoleLogger(C2SBlockPlacement::class).info("Modify $location = ${KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!![location][location.toChunkPos()]}")
             }
         }

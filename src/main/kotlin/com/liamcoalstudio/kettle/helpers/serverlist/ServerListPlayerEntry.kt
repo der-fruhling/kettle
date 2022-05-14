@@ -1,5 +1,9 @@
-package com.liamcoalstudio.kettle.helpers.serverlist.java;
+package com.liamcoalstudio.kettle.helpers.serverlist
 
-public class ServerListPlayerEntry {
-    public String name, id;
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ServerListPlayerEntry(
+    var name: String,
+    var id: String
+)

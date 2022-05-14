@@ -8,7 +8,6 @@ import com.liamcoalstudio.kettle.helpers.KettleProperties
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
 import com.liamcoalstudio.kettle.tasks.Tasks
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.collections.HashMap
 import kotlin.math.floor
 import kotlin.random.Random
 
@@ -35,8 +34,8 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
 
     @ExperimentalStdlibApi
     operator fun get(pos: Position): Chunk {
-        if(!chunks.containsKey(pos))
-            chunks[pos] = if(KettleProperties.flat) Chunk(pos) else Chunk(this, pos)
+        if (!chunks.containsKey(pos))
+            chunks[pos] = if (KettleProperties.flat) Chunk(pos) else Chunk(this, pos)
         return chunks[pos]!!
     }
 
@@ -60,7 +59,8 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
                     runnables.add {
                         ref.getAndUpdate {
                             val s = System.nanoTime()
-                            it[Position(x,y,z)] = if(noise == null) Chunk(Position(x,y,z)) else Chunk(it, Position(x,y,z))
+                            it[Position(x, y, z)] =
+                                if (noise == null) Chunk(Position(x, y, z)) else Chunk(it, Position(x, y, z))
                             val e = System.nanoTime()
                             times.add(e - s)
                             it
@@ -81,15 +81,16 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
         ((noise!!.GetNoise(
             (x * 16).toFloat() + bx.toFloat(),
             (z * 16).toFloat() + bz.toFloat(),
-            index) + 1.0) / 8.0) *
-            64.0 - (y.toFloat() * 16.0 + by.toFloat())
+            index
+        ) + 1.0) / 8.0) *
+                64.0 - (y.toFloat() * 16.0 + by.toFloat())
 
     fun heightMap(x: Long, y: Long, z: Long) =
         Array(16) { bx ->
             Array(16) { by ->
                 Array(16) { bz ->
                     getNoise(x, bx.toByte(), y, by.toByte(), z, bz.toByte(), 0.0f) +
-                    getNoise(x, bx.toByte(), y, by.toByte(), z, bz.toByte(), 2.0f)
+                            getNoise(x, bx.toByte(), y, by.toByte(), z, bz.toByte(), 2.0f)
                 }
             }
         }
@@ -97,7 +98,7 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
     @ExperimentalStdlibApi
     fun getBlockAt(pos: Position): Int {
         val (dpos, mpos) = posToPoses(pos)
-        return this[dpos][mpos];
+        return this[dpos][mpos]
     }
 
     @ExperimentalStdlibApi
@@ -113,12 +114,14 @@ class World(val dimension: Dimension, val noise: FastNoiseLite?) {
         val dpos = Position(
             floor(pos.x.toDouble() / 16.0).toLong(),
             floor(pos.y.toDouble() / 16.0).toLong(),
-            floor(pos.z.toDouble() / 16.0).toLong())
+            floor(pos.z.toDouble() / 16.0).toLong()
+        )
         val mpos = Position(
             floor(pos.x.toDouble() % 16.0).toLong(),
             floor(pos.y.toDouble() % 16.0).toLong(),
-            floor(pos.z.toDouble() % 16.0).toLong()).toChunkPos()
-        return Pair(dpos, mpos);
+            floor(pos.z.toDouble() % 16.0).toLong()
+        ).toChunkPos()
+        return Pair(dpos, mpos)
     }
 
     companion object {

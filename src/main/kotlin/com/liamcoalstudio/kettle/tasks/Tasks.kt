@@ -1,6 +1,5 @@
 package com.liamcoalstudio.kettle.tasks
 
-import java.lang.IndexOutOfBoundsException
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -25,17 +24,19 @@ object Tasks {
     fun executeAllAsync(vararg runnables: Runnable): AwaitableTask {
         val ref = runnables.toMutableList()
         val j = AtomicInteger()
-        val threads = MutableList(Runtime.getRuntime().availableProcessors()) { i -> Thread({
-            while(ref.isNotEmpty()) {
-                var r: Runnable
-                try {
-                    r = ref[j.getAndIncrement()]
-                } catch(e: IndexOutOfBoundsException) {
-                    return@Thread
+        val threads = MutableList(Runtime.getRuntime().availableProcessors()) { i ->
+            Thread({
+                while (ref.isNotEmpty()) {
+                    var r: Runnable
+                    try {
+                        r = ref[j.getAndIncrement()]
+                    } catch (e: IndexOutOfBoundsException) {
+                        return@Thread
+                    }
+                    r.run()
                 }
-                r.run()
-            }
-        }, "WorkerThread:$i") }
+            }, "WorkerThread:$i")
+        }
         threads.forEach { it.start() }
         return AwaitableTask(threads.toTypedArray())
     }

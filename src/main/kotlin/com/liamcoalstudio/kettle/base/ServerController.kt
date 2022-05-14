@@ -10,7 +10,7 @@ abstract class ServerController(private val server: Server) {
     fun stop() {
         server.deinit()
         thread.join(30000)
-        if(thread.isAlive)
+        if (thread.isAlive)
             stopForcefully()
     }
 }

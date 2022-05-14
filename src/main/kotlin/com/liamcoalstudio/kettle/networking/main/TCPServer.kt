@@ -1,7 +1,6 @@
 package com.liamcoalstudio.kettle.networking.main
 
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
-import com.liamcoalstudio.kettle.servers.java.JavaServer
 import java.net.InetSocketAddress
 import java.nio.channels.AsynchronousServerSocketChannel
 import java.nio.channels.AsynchronousSocketChannel
@@ -11,7 +10,8 @@ class TCPServer(port: Int) {
     private val socketChannel: AsynchronousServerSocketChannel =
         AsynchronousServerSocketChannel.open().bind(InetSocketAddress(port))
 
-    class CompletionHandler(val handler: (TCPServer, Client) -> Unit, private val server: TCPServer) : java.nio.channels.CompletionHandler<AsynchronousSocketChannel, TCPServer> {
+    class CompletionHandler(val handler: (TCPServer, Client) -> Unit, private val server: TCPServer) :
+        java.nio.channels.CompletionHandler<AsynchronousSocketChannel, TCPServer> {
         override fun completed(p0: AsynchronousSocketChannel?, p1: TCPServer?) {
             server.logger.info("Client connected")
             handler(p1!!, Client(p0!!))

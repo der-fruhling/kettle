@@ -3,7 +3,10 @@ package com.liamcoalstudio.kettle.networking.java.handshake
 import com.liamcoalstudio.kettle.helpers.Buffer
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
 import com.liamcoalstudio.kettle.networking.main.Client
-import com.liamcoalstudio.kettle.networking.main.packets.*
+import com.liamcoalstudio.kettle.networking.main.packets.ClientState
+import com.liamcoalstudio.kettle.networking.main.packets.Packet
+import com.liamcoalstudio.kettle.networking.main.packets.Producer
+import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 
 class C2SHandshakePacket : Packet(0x00, ClientState.Status.Handshake), Producer<Packet> {
     private val logger = ConsoleLogger(C2SHandshakePacket::class)
@@ -20,7 +23,7 @@ class C2SHandshakePacket : Packet(0x00, ClientState.Status.Handshake), Producer<
     }
 
     override fun updateOnRead(state: ServerState, client: Client) {
-        when(next) {
+        when (next) {
             1 -> client.status = ClientState.Status.Status
             2 -> client.status = ClientState.Status.Login
             else -> throw NotImplementedError("$next is invalid")

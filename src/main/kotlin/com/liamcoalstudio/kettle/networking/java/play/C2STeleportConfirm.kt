@@ -19,7 +19,7 @@ class C2STeleportConfirm : Packet(0x00, ClientState.Status.Play), Producer<Packe
 
     override fun updateOnRead(state: ServerState, client: Client) {
         val player = KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!.players.find { it.client == client }!!
-        if(player.actions[tid] is TeleportAction) {
+        if (player.actions[tid] is TeleportAction) {
             player.actions[tid]!!.perform()
             player.actions.remove(tid)
         }

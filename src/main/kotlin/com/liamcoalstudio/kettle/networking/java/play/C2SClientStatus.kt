@@ -6,7 +6,6 @@ import com.liamcoalstudio.kettle.networking.main.packets.ClientState
 import com.liamcoalstudio.kettle.networking.main.packets.Packet
 import com.liamcoalstudio.kettle.networking.main.packets.Producer
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
-import com.liamcoalstudio.kettle.servers.main.KettleServer
 
 class C2SClientStatus : Packet(0x04, ClientState.Status.Play), Producer<Packet> {
     var enum: Int = 0
@@ -24,5 +23,5 @@ class C2SClientStatus : Packet(0x04, ClientState.Status.Play), Producer<Packet> 
 //        }
     }
 
-    override fun produce(serverState: ServerState)= C2SClientStatus()
+    override fun produce(serverState: ServerState) = C2SClientStatus()
 }

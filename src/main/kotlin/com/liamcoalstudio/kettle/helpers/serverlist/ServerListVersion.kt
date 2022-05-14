@@ -1,6 +1,9 @@
-package com.liamcoalstudio.kettle.helpers.serverlist.java;
+package com.liamcoalstudio.kettle.helpers.serverlist
 
-public class ServerListVersion {
-    public String name;
-    public int protocol;
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ServerListVersion(
+    var name: String,
+    var protocol: Int
+)

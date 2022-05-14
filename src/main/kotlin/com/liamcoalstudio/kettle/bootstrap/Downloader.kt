@@ -1,14 +1,14 @@
 package com.liamcoalstudio.kettle.bootstrap
 
-import com.google.gson.Gson
 import com.liamcoalstudio.kettle.logging.ConsoleLogger
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.decodeFromStream
 import java.io.File
+import java.io.FileOutputStream
 import java.net.URL
 import java.nio.channels.Channels
-import java.nio.channels.ReadableByteChannel
 import java.nio.channels.FileChannel
-
-import java.io.FileOutputStream
+import java.nio.channels.ReadableByteChannel
 
 object Downloader {
     val logger = ConsoleLogger(Downloader::class)
@@ -24,14 +24,14 @@ object Downloader {
 
     fun downloadAll() {
         val res = Downloader::class.java.getResource("/download.json")
-        val entries = Gson().fromJson(res.openStream().reader(), Array<DownloadEntry>::class.java)
-        if(!File("objects").exists())
+        val entries = Json.decodeFromStream<List<DownloadEntry>>(res!!.openStream())
+        if (!File("objects").exists())
             File("objects").mkdir()
         val toDownload = entries.filter { !File("objects/${it.dest}").exists() }
         toDownload.forEach {
             download("objects/${it.dest}", URL(it.src))
         }
-        if(toDownload.isEmpty())
+        if (toDownload.isEmpty())
             logger.info("All up to date :D")
         else
             logger.info("Downloaded ${toDownload.size} files.")

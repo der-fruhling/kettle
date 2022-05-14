@@ -1,7 +1,10 @@
-package com.liamcoalstudio.kettle.helpers.serverlist.java;
+package com.liamcoalstudio.kettle.helpers.serverlist
 
-public class ServerListJSON {
-    public ServerListVersion version;
-    public ServerListPlayerInfo players;
-    public Text description;
-}
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ServerListJSON(
+    var version: ServerListVersion,
+    var players: ServerListPlayerInfo,
+    var description: Text
+)

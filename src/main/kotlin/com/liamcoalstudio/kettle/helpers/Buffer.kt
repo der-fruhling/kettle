@@ -10,12 +10,14 @@ import java.util.*
  */
 class Buffer() {
     val hasMore: Boolean get() = readIndex < list.size
-    val bytesLeft: Int get() =  list.size - readIndex
+    val bytesLeft: Int get() = list.size - readIndex
     private var list: MutableList<Byte> = MutableList(0) { 0 }
     private var readIndex = 0
     var array
         get() = list.toByteArray()
-        set(value) { list = value.toMutableList() }
+        set(value) {
+            list = value.toMutableList()
+        }
 
     constructor(array: ByteArray) : this() {
         this.array = array

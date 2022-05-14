@@ -1,4 +1,9 @@
 package com.liamcoalstudio.kettle.bootstrap
 
-class DownloadEntry(@JvmField var dest: String,
-                    @JvmField var src: String)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class DownloadEntry(
+    var dest: String,
+    var src: String
+)

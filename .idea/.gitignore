@@ -6,3 +6,6 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+# Liam installed a new plugin
+discord.xml

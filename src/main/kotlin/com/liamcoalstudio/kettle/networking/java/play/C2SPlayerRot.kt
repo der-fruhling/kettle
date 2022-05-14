@@ -8,7 +8,6 @@ import com.liamcoalstudio.kettle.networking.main.packets.Packet
 import com.liamcoalstudio.kettle.networking.main.packets.Producer
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.servers.main.KettleServer
-import kotlin.math.hypot
 
 class C2SPlayerRot : Packet(0x14, ClientState.Status.Play), Producer<Packet> {
     var yaw: Float = 0.0f

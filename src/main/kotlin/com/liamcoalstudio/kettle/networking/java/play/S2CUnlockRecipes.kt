@@ -17,7 +17,7 @@ class S2CUnlockRecipes(private val r: RecipeUnlockAction) : Packet(0x35, null) {
         buf.addBoolean(r.displayState.smokerBookFiltering)
         buf.addVarInt(r.a1.size)
         r.a1.forEach { buf.addString(it.toString()) }
-        if(r.type == RecipeUnlockAction.Type.Init) {
+        if (r.type == RecipeUnlockAction.Type.Init) {
             buf.addVarInt(r.a2.size)
             r.a2.forEach { buf.addString(it.toString()) }
         }

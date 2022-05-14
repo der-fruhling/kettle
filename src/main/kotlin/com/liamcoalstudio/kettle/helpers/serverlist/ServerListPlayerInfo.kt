@@ -1,8 +1,10 @@
-package com.liamcoalstudio.kettle.helpers.serverlist.java;
+package com.liamcoalstudio.kettle.helpers.serverlist
 
-import java.util.List;
+import kotlinx.serialization.Serializable
 
-public class ServerListPlayerInfo {
-    public int max, online;
-    public List<ServerListPlayerEntry> sample;
-}
+@Serializable
+data class ServerListPlayerInfo(
+    var max: Int = 0,
+    var online: Int = 0,
+    var sample: List<ServerListPlayerEntry>
+)

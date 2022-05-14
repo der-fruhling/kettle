@@ -8,7 +8,6 @@ import com.liamcoalstudio.kettle.networking.main.packets.Packet
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.servers.main.KettleServer
 import com.liamcoalstudio.kettle.world.Player
-import com.liamcoalstudio.kettle.world.World
 import kotlin.random.Random
 
 class S2CPlayerPosAndLook(
@@ -25,24 +24,26 @@ class S2CPlayerPosAndLook(
         buf.addDouble(z)
         buf.addFloat(yaw)
         buf.addFloat(pitch)
-        buf.addByte((0 or
-            (if(xr)     0b00000001 else 0) or
-            (if(yr)     0b00000010 else 0) or
-            (if(zr)     0b00000100 else 0) or
-            (if(pitchr) 0b00001000 else 0) or
-            (if(yawr)   0b00010000 else 0)
-        ).toByte())
+        buf.addByte(
+            (0 or
+                    (if (xr) 0b00000001 else 0) or
+                    (if (yr) 0b00000010 else 0) or
+                    (if (zr) 0b00000100 else 0) or
+                    (if (pitchr) 0b00001000 else 0) or
+                    (if (yawr) 0b00010000 else 0)
+                    ).toByte()
+        )
         val id = Random.nextInt()
         buf.addVarInt(id)
         tid = id
     }
 
     private fun toAbsolute(player: Player): S2CPlayerPosAndLook = S2CPlayerPosAndLook(
-        if(xr)x+player.x else x, xr,
-        if(yr)y+player.y else y, yr,
-        if(zr)z+player.z else z, zr,
-        if(yawr)yaw+player.yaw else yaw, yawr,
-        if(pitchr)pitch+player.pitch else pitch, pitchr
+        if (xr) x + player.x else x, xr,
+        if (yr) y + player.y else y, yr,
+        if (zr) z + player.z else z, zr,
+        if (yawr) yaw + player.yaw else yaw, yawr,
+        if (pitchr) pitch + player.pitch else pitch, pitchr
     )
 
     override fun updateOnWrite(state: ServerState, client: Client) {

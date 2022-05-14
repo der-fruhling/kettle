@@ -29,10 +29,16 @@ class C2SBlockDigging : Packet(0x1b, ClientState.Status.Play), Producer<Packet> 
     override fun updateOnRead(state: ServerState, client: Client) {
         KettleServer.GLOBAL!!.get().execute {
             val world = KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!
-            when(status) {
+            when (status) {
                 0, 2 -> world.setBlockAt(location!!, Block.Air)
             }
-            ConsoleLogger(C2SBlockDigging::class).info("Modify $location = ${KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!.getBlockAt(location!!)}")
+            ConsoleLogger(C2SBlockDigging::class).info(
+                "Modify $location = ${
+                    KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!.getBlockAt(
+                        location!!
+                    )
+                }"
+            )
         }
     }
 

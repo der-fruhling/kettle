@@ -3,7 +3,10 @@ package com.liamcoalstudio.kettle.networking.java.play
 import com.liamcoalstudio.kettle.helpers.Block
 import com.liamcoalstudio.kettle.helpers.Buffer
 import com.liamcoalstudio.kettle.networking.main.packets.Packet
-import com.liamcoalstudio.kettle.world.*
+import com.liamcoalstudio.kettle.world.Biome
+import com.liamcoalstudio.kettle.world.Player
+import com.liamcoalstudio.kettle.world.Position
+import com.liamcoalstudio.kettle.world.World
 import net.querz.nbt.io.NBTSerializer
 import net.querz.nbt.io.NamedTag
 import net.querz.nbt.tag.CompoundTag
@@ -22,8 +25,13 @@ class S2CChunkDataPacket @ExperimentalStdlibApi constructor(
         var bitmask = 0
         val chunkYList = mutableListOf<Long>()
 
-        for(i in 0L..15L) {
-            bitmask = bitmask or ((if(world[Position(x, i, z)].blocks.all { it.value == Block.Air.id }) 0 else 1) shl i.toInt())
+        for (i in 0L..15L) {
+            bitmask = bitmask or ((if (world[Position(
+                    x,
+                    i,
+                    z
+                )].blocks.all { it.value == Block.Air.id }
+            ) 0 else 1) shl i.toInt())
             chunkYList.add(i)
         }
 
@@ -36,10 +44,10 @@ class S2CChunkDataPacket @ExperimentalStdlibApi constructor(
         buf.addBuffer(Buffer(NBTSerializer(false).toBytes(NamedTag("_", compound))))
 
         buf.addVarInt(1024)
-        for(i in 0 until 1024)
+        for (i in 0 until 1024)
             buf.addVarInt(Biome.OCEAN.id)
 
-        for(y in chunkYList) {
+        for (y in chunkYList) {
             world[Position(x, y, z)].write(cbuf)
         }
         buf.addVarInt(cbuf.array.size)

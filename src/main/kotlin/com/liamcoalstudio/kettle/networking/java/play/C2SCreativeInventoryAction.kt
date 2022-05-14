@@ -1,7 +1,6 @@
 package com.liamcoalstudio.kettle.networking.java.play
 
 import com.liamcoalstudio.kettle.helpers.Buffer
-import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.helpers.Item
 import com.liamcoalstudio.kettle.networking.main.Client
 import com.liamcoalstudio.kettle.networking.main.packets.ClientState
@@ -23,9 +22,9 @@ class C2SCreativeInventoryAction : Packet(0x28, ClientState.Status.Play), Produc
 
     override fun updateOnRead(state: ServerState, client: Client) {
         val player = KettleServer.player(client)
-        if(clickedItem.present && Item.values().contains(clickedItem.item!!))
+        if (clickedItem.present && Item.values().contains(clickedItem.item!!))
             player.inventory[slot.toInt()] = clickedItem
-        else if(clickedItem.present)
+        else if (clickedItem.present)
             player.inventory[slot.toInt()]
     }
 

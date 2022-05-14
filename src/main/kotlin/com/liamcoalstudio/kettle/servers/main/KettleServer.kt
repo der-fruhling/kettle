@@ -1,6 +1,5 @@
 package com.liamcoalstudio.kettle.servers.main
 
-import com.google.gson.Gson
 import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.helpers.KettleProperties
 import com.liamcoalstudio.kettle.helpers.LambdaTimerTask
@@ -9,7 +8,9 @@ import com.liamcoalstudio.kettle.logging.ConsoleLogger
 import com.liamcoalstudio.kettle.networking.java.play.*
 import com.liamcoalstudio.kettle.networking.main.Client
 import com.liamcoalstudio.kettle.servers.java.JavaServer
-import com.liamcoalstudio.kettle.world.*
+import com.liamcoalstudio.kettle.world.Player
+import com.liamcoalstudio.kettle.world.World
+import com.liamcoalstudio.kettle.world.WorldNBTEncoder
 import net.querz.nbt.io.NBTUtil
 import net.querz.nbt.io.NamedTag
 import net.querz.nbt.tag.CompoundTag
@@ -18,7 +19,6 @@ import net.querz.nbt.tag.ListTag
 import java.io.File
 import java.util.*
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.collections.HashMap
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -41,7 +41,7 @@ class KettleServer {
 
     @ExperimentalStdlibApi
     private fun initWorlds() {
-        val world = if(KettleProperties.flat) World.flat() else World.noise(Random.nextLong())
+        val world = if (KettleProperties.flat) World.flat() else World.noise(Random.nextLong())
         worlds[Dimension.OVERWORLD] = world
 
         timer.scheduleAtFixedRate(LambdaTimerTask {
@@ -56,7 +56,7 @@ class KettleServer {
         initWorlds()
         isFullyInitialized = true
         ConsoleLogger(KettleServer::class).info("Initialized")
-        while(shouldTick()) {
+        while (shouldTick()) {
             val start = Calendar.getInstance()
             tick()
             val end = Calendar.getInstance()
@@ -87,13 +87,15 @@ class KettleServer {
             client.send(S2CEntityStatus(player.eid, 23))
             client.send(S2CEntityStatus(player.eid, 28))
             client.send(S2CWindowItems(0, player.inventory))
-            client.send(S2CPlayerPosAndLook(
-                KettleProperties.spawn.x, false,
-                KettleProperties.spawn.y, false,
-                KettleProperties.spawn.z, false,
-                KettleProperties.spawn.yaw.toFloat(), false,
-                KettleProperties.spawn.pitch.toFloat(), false,
-            ))
+            client.send(
+                S2CPlayerPosAndLook(
+                    KettleProperties.spawn.x, false,
+                    KettleProperties.spawn.y, false,
+                    KettleProperties.spawn.z, false,
+                    KettleProperties.spawn.yaw.toFloat(), false,
+                    KettleProperties.spawn.pitch.toFloat(), false,
+                )
+            )
         }
     }
 
@@ -101,12 +103,12 @@ class KettleServer {
     fun saveWorlds() {
         val chunksList = ListTag(IntArrayTag::class.java)
 
-        if(!File("worlds").exists()) File("worlds").mkdir()
+        if (!File("worlds").exists()) File("worlds").mkdir()
 
         worlds.forEach { (dimension, world) ->
             logger.info("Saving world $dimension")
             val nbt = WorldNBTEncoder.encode(world, chunksList)
-            NBTUtil.write(NamedTag("World", nbt), File("worlds/${dimension.name.toLowerCase()}.nbt"), true)
+            NBTUtil.write(NamedTag("World", nbt), File("worlds/${dimension.name.lowercase(Locale.getDefault())}.nbt"), true)
         }
 
         logger.info("Saving chunks")

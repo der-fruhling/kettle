@@ -10,9 +10,6 @@ import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.servers.main.KettleServer
 
 class C2SDisconnect : Packet(0, ClientState.Status.Play), Producer<Packet> {
-    override fun read(buf: Buffer) {
-        super.read(buf)
-    }
 
     override fun updateOnRead(state: ServerState, client: Client) {
         val world = KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!

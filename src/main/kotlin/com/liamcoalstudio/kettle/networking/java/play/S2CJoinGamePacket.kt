@@ -1,12 +1,10 @@
 package com.liamcoalstudio.kettle.networking.java.play
 
+import com.liamcoalstudio.kettle.helpers.Buffer
 import com.liamcoalstudio.kettle.networking.main.Client
 import com.liamcoalstudio.kettle.networking.main.packets.ClientState
 import com.liamcoalstudio.kettle.networking.main.packets.Packet
-import com.liamcoalstudio.kettle.helpers.Buffer
-import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
-import com.liamcoalstudio.kettle.servers.java.JavaServer
 import com.liamcoalstudio.kettle.servers.main.KettleServer
 import net.querz.nbt.io.NBTSerializer
 import net.querz.nbt.io.NamedTag

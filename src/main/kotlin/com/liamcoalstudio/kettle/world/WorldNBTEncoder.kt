@@ -3,6 +3,7 @@ package com.liamcoalstudio.kettle.world
 import net.querz.nbt.tag.CompoundTag
 import net.querz.nbt.tag.IntArrayTag
 import net.querz.nbt.tag.ListTag
+import java.util.*
 
 object WorldNBTEncoder {
     fun encodeChunk(x: Long, y: Long, z: Long, index: Int): CompoundTag {
@@ -17,7 +18,7 @@ object WorldNBTEncoder {
     @ExperimentalStdlibApi
     fun encode(world: World, chunkList: ListTag<IntArrayTag>): CompoundTag {
         val tag = CompoundTag()
-        tag.putString("Name", world.dimension.name.toLowerCase())
+        tag.putString("Name", world.dimension.name.lowercase(Locale.getDefault()))
         tag.putString("Type", world.dimension.name)
 
         val size = CompoundTag()

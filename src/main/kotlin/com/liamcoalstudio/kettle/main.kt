@@ -18,7 +18,7 @@ fun main() {
     })
     KettleServer.THREAD.get().name = "kettle.thread_tick"
     KettleServer.THREAD.get().start()
-    while(KettleServer.GLOBAL!!.get()?.isFullyInitialized != true)
+    while (KettleServer.GLOBAL!!.get()?.isFullyInitialized != true)
         Thread.onSpinWait()
 
     JavaServer.GLOBAL_CONTROLLER = AtomicReference(JavaServer().start() as JavaServerController)

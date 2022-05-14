@@ -36,7 +36,8 @@ data class Position(var x: Long, var y: Long, var z: Long) {
     fun floorDiv(long: Long): Position = Position(
         floor(x.toDouble() / long).toLong(),
         floor(y.toDouble() / long).toLong(),
-        floor(z.toDouble() / long).toLong())
+        floor(z.toDouble() / long).toLong()
+    )
 
     fun inRange(xRange: LongRange, yRange: LongRange, zRange: LongRange) =
         xRange.contains(x) and yRange.contains(y) and zRange.contains(z)
@@ -59,9 +60,15 @@ data class Position(var x: Long, var y: Long, var z: Long) {
             var x = (v shr 38).toLong()
             var y = (v and 0xFFFu).toLong()
             var z = (v shl 26 shr 38).toLong()
-            if (x >= 2.0.pow(25)) { x -= 2.0.pow(26).toLong() }
-            if (y >= 2.0.pow(11)) { y -= 2.0.pow(12).toLong() }
-            if (z >= 2.0.pow(25)) { z -= 2.0.pow(26).toLong() }
+            if (x >= 2.0.pow(25)) {
+                x -= 2.0.pow(26).toLong()
+            }
+            if (y >= 2.0.pow(11)) {
+                y -= 2.0.pow(12).toLong()
+            }
+            if (z >= 2.0.pow(25)) {
+                z -= 2.0.pow(26).toLong()
+            }
 //            x -= 1
             y += 1
             return Position(x, y, z)

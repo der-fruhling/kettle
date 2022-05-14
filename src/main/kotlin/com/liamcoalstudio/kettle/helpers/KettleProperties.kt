@@ -1,9 +1,7 @@
 package com.liamcoalstudio.kettle.helpers
 
-import com.google.common.io.Files
-import com.google.gson.Gson
-import com.google.gson.GsonBuilder
-import com.google.gson.stream.JsonReader
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
 import org.intellij.lang.annotations.Language
 import java.io.File
 import java.io.FileReader
@@ -33,13 +31,12 @@ object KettleProperties {
     """.trimIndent()
 
     fun load() {
-        val gson = Gson()
-        if(!File("properties.json").exists()) {
+        if (!File("properties.json").exists()) {
             val wr = FileWriter("properties.json")
             wr.write(defaultConfig)
             wr.close()
         }
-        val p = gson.fromJson(FileReader("properties.json"), GsonProperties::class.java)
+        val p = FileReader("properties.json").use { Json.decodeFromString<ServerConfiguration>(serializer(), it.readText()) }
         motd = p.motd
         viewDistance = p.viewDistance
         gamemode = p.gamemode

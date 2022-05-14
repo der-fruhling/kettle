@@ -1,7 +1,6 @@
 package com.liamcoalstudio.kettle.networking.main.nodes
 
 import com.liamcoalstudio.kettle.helpers.Buffer
-import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.util.zip.DeflaterOutputStream
 import java.util.zip.InflaterOutputStream
@@ -12,7 +11,7 @@ class CompressionNode : Node() {
     override fun passWrite(input: ByteArray): ByteArray {
         val bufi = Buffer(input)
         val size = bufi.getVarInt()
-        return if(threshold in 1..size) {
+        return if (threshold in 1..size) {
             val out = ByteArrayOutputStream()
             val bytes = DeflaterOutputStream(out)
 
@@ -47,7 +46,7 @@ class CompressionNode : Node() {
         val buf = bufi.getBuffer(size)
         val usize = buf.getVarInt()
         val bytesLeft = size - (size - buf.bytesLeft)
-        return if(usize > 0) {
+        return if (usize > 0) {
             val compressed = buf.getBuffer(bytesLeft).array
 
             println(compressed.contentToString())

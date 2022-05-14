@@ -3,7 +3,6 @@ package com.liamcoalstudio.kettle.world
 import com.liamcoalstudio.kettle.helpers.Block
 import com.liamcoalstudio.kettle.helpers.Buffer
 import com.liamcoalstudio.kettle.helpers.Item
-import com.liamcoalstudio.kettle.servers.main.KettleServer
 import net.querz.nbt.io.NBTDeserializer
 import net.querz.nbt.io.NBTSerializer
 import net.querz.nbt.io.NamedTag
@@ -17,7 +16,7 @@ data class Slot(val present: Boolean, val id: Int, val count: Byte, val nbt: Com
 
     fun write(buffer: Buffer) {
         buffer.addBoolean(present)
-        if(present) {
+        if (present) {
             buffer.addVarInt(id)
             buffer.addByte(count)
             buffer.addBuffer(Buffer(NBTSerializer(false).toBytes(NamedTag("NBT", nbt))))
@@ -25,7 +24,7 @@ data class Slot(val present: Boolean, val id: Int, val count: Byte, val nbt: Com
     }
 
     override fun toString(): String {
-        return if(present)
+        return if (present)
             "Slot(present=$present, id=$id, count=$count, nbt=$nbt, item=$item, block=$block)"
         else
             "Slot<empty>"
@@ -34,10 +33,10 @@ data class Slot(val present: Boolean, val id: Int, val count: Byte, val nbt: Com
     companion object {
         fun read(buffer: Buffer): Slot {
             val present = buffer.getBoolean()
-            return if(present) {
+            return if (present) {
                 val id = buffer.getVarInt()
                 val count = buffer.getByte()
-                val nbt = if(buffer.peekByte() != 0.toByte())
+                val nbt = if (buffer.peekByte() != 0.toByte())
                     NBTDeserializer(false).fromBytes(buffer.getBuffer(buffer.bytesLeft).array).tag as CompoundTag
                 else
                     CompoundTag()

@@ -10,32 +10,46 @@ import kotlin.experimental.or
 
 open class BytePacketObject(v: Byte) : PacketObject<Byte>(v) {
     override fun toByteArray() = arrayOf(obj)
+
     constructor(array: Array<Byte>) : this(array[0])
 }
+
 open class ShortPacketObject(v: Short) : PacketObject<Short>(v) {
     override fun toByteArray() = Shorts.toByteArray(obj).toTypedArray()
+
     constructor(array: Array<Byte>) : this(Shorts.fromByteArray(array.toByteArray()))
 }
+
 open class IntPacketObject(v: Int) : PacketObject<Int>(v) {
     override fun toByteArray() = Ints.toByteArray(obj).toTypedArray()
+
     constructor(array: Array<Byte>) : this(Ints.fromByteArray(array.toByteArray()))
 }
-open class LongPacketObject(v: Long) :  PacketObject<Long>(v) {
+
+open class LongPacketObject(v: Long) : PacketObject<Long>(v) {
     override fun toByteArray() = Longs.toByteArray(obj).toTypedArray()
+
     constructor(array: Array<Byte>) : this(Longs.fromByteArray(array.toByteArray()))
 }
+
 open class FloatPacketObject(v: Float) : PacketObject<Float>(v) {
     override fun toByteArray() = Ints.toByteArray(java.lang.Float.floatToIntBits(obj)).toTypedArray()
+
     constructor(array: Array<Byte>) : this(Float.fromBits(Ints.fromByteArray(array.toByteArray())))
 }
+
 open class DoublePacketObject(v: Double) : PacketObject<Double>(v) {
     override fun toByteArray() = Longs.toByteArray(java.lang.Double.doubleToLongBits(obj)).toTypedArray()
+
     constructor(array: Array<Byte>) : this(Double.fromBits(Longs.fromByteArray(array.toByteArray())))
 }
+
 open class BooleanPacketObject(v: Boolean) : PacketObject<Boolean>(v) {
-    override fun toByteArray(): Array<Byte> = arrayOf(if(obj) 0x01 else 0x00)
+    override fun toByteArray(): Array<Byte> = arrayOf(if (obj) 0x01 else 0x00)
+
     constructor(array: Array<Byte>) : this(array[0] == 0x01.toByte())
 }
+
 open class VarIntPacketObject(v: Int) : PacketObject<Int>(v) {
     override fun toByteArray(): Array<Byte> {
         val buf = ByteBuffer.allocate(16)
@@ -71,6 +85,7 @@ open class VarIntPacketObject(v: Int) : PacketObject<Int>(v) {
         }
     }
 }
+
 open class VarLongPacketObject(v: Long) : PacketObject<Long>(v) {
     override fun toByteArray(): Array<Byte> {
         val buf = ByteBuffer.allocate(16)
@@ -106,26 +121,29 @@ open class VarLongPacketObject(v: Long) : PacketObject<Long>(v) {
         }
     }
 }
+
 open class StringPacketObject(v: String, val short: Boolean) : PacketObject<String>(v) {
     override fun toByteArray(): Array<Byte> =
-        (if(!short) VarIntPacketObject(obj.length) else ShortPacketObject(obj.length.toShort()))
+        (if (!short) VarIntPacketObject(obj.length) else ShortPacketObject(obj.length.toShort()))
             .toByteArray().plus(obj.toByteArray().toTypedArray())
+
     constructor(buf: Buffer, short: Boolean) : this(readString(buf.getVarInt(), buf), short)
 
     companion object {
         fun readString(size: Int, buf: Buffer): String {
             var string = ""
             for (i in 0 until size) {
-                string += buf.getByte().toChar()
+                string += buf.getByte().toInt().toChar()
             }
             return string
         }
     }
 }
+
 open class UUIDPacketObject(v: UUID) : PacketObject<UUID>(v) {
     override fun toByteArray() =
         LongPacketObject(obj.mostSignificantBits).toByteArray() +
-        LongPacketObject(obj.leastSignificantBits).toByteArray()
+                LongPacketObject(obj.leastSignificantBits).toByteArray()
 
     constructor(buf: Buffer) : this(UUID(buf.getLong(), buf.getLong()))
 }

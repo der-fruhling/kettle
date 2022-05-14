@@ -38,30 +38,32 @@ enum class Biome(
         offset = 2.0,
         blockSearchExtent = 8
     );
-    val codec: CompoundTag get() {
-        val compound = CompoundTag()
-        compound.putString("name", biomeName)
-        compound.putInt("id", id)
-        val element = CompoundTag()
-        element.putString("precipitation", precipitation)
-        element.putFloat("depth", depth)
-        element.putFloat("temperature", temperature)
-        element.putFloat("scale", scale)
-        element.putFloat("downfall", downfall)
-        element.putString("category", category)
-        val effects = CompoundTag()
-        effects.putInt("sky_color", skyColor)
-        effects.putInt("water_fog_color", waterFogColor)
-        effects.putInt("fog_color", fogColor)
-        effects.putInt("water_color", waterColor)
-        val moodSoundTag = CompoundTag()
-        moodSoundTag.putInt("tick_delay", delay)
-        moodSoundTag.putDouble("offset", offset)
-        moodSoundTag.putString("sound", moodSound)
-        moodSoundTag.putInt("block_search_extent", blockSearchExtent)
-        effects.put("mood_sound", moodSoundTag)
-        element.put("effects", effects)
-        compound.put("element", element)
-        return compound
-    }
+
+    val codec: CompoundTag
+        get() {
+            val compound = CompoundTag()
+            compound.putString("name", biomeName)
+            compound.putInt("id", id)
+            val element = CompoundTag()
+            element.putString("precipitation", precipitation)
+            element.putFloat("depth", depth)
+            element.putFloat("temperature", temperature)
+            element.putFloat("scale", scale)
+            element.putFloat("downfall", downfall)
+            element.putString("category", category)
+            val effects = CompoundTag()
+            effects.putInt("sky_color", skyColor)
+            effects.putInt("water_fog_color", waterFogColor)
+            effects.putInt("fog_color", fogColor)
+            effects.putInt("water_color", waterColor)
+            val moodSoundTag = CompoundTag()
+            moodSoundTag.putInt("tick_delay", delay)
+            moodSoundTag.putDouble("offset", offset)
+            moodSoundTag.putString("sound", moodSound)
+            moodSoundTag.putInt("block_search_extent", blockSearchExtent)
+            effects.put("mood_sound", moodSoundTag)
+            element.put("effects", effects)
+            compound.put("element", element)
+            return compound
+        }
 }

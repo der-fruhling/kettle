@@ -11,7 +11,10 @@ abstract class Node {
 
     open fun passThroughWrite(input: ByteArray): ByteArray = output!!.get().passThroughWrite(passWrite(input))
     open fun passThroughRead(input: ByteArray): ByteArray = output!!.get().passThroughRead(passRead(input))
-    open fun setOutput(node: Node) { output = AtomicReference(node) }
+    open fun setOutput(node: Node) {
+        output = AtomicReference(node)
+    }
+
     open fun insertAfter(node: Node) {
         node.output = output
         output = AtomicReference(node)

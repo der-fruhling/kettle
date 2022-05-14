@@ -1,3 +1,6 @@
 [
-  {"dest": "dimcodec.test.snbt", "src": "https://gist.githubusercontent.com/aramperes/44e2beefac9fe966177f2f28dd0136ab/raw/fedb31c32e27265fb916a68ad476470fc65631da/1-dimension_codec.snbt"}
+  {
+    "dest": "dimcodec.test.snbt",
+    "src": "https://gist.githubusercontent.com/aramperes/44e2beefac9fe966177f2f28dd0136ab/raw/fedb31c32e27265fb916a68ad476470fc65631da/1-dimension_codec.snbt"
+  }
 ]

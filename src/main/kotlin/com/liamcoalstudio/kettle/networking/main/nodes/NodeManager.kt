@@ -13,6 +13,7 @@ class NodeManager {
         (compressionNode as CompressionNode).threshold = i
         startNode.insertAfter(compressionNode)
     }
+
     fun disableCompression() = startNode.setOutput(endNode)
     fun hasCompression() = startNode.isOutputOf(CompressionNode::class)
 

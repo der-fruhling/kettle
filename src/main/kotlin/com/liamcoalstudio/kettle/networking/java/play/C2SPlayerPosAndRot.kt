@@ -10,7 +10,6 @@ import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.servers.java.JavaServer
 import com.liamcoalstudio.kettle.servers.main.KettleServer
 import kotlin.math.floor
-import kotlin.math.hypot
 
 class C2SPlayerPosAndRot : Packet(0x13, ClientState.Status.Play), Producer<Packet> {
     var x: Double = 0.0
@@ -41,7 +40,7 @@ class C2SPlayerPosAndRot : Packet(0x13, ClientState.Status.Play), Producer<Packe
         player.z = z
         player.yaw = yaw
         player.pitch = pitch
-        if(update) player.updateChunks().start()
+        if (update) player.updateChunks().start()
         JavaServer.GLOBAL_CONTROLLER!!.get().execute {
             player.client!!.send(S2CUpdateViewPosition(floor(x / 16.0).toInt(), floor(z / 16.0).toInt()))
         }

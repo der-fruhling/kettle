@@ -96,7 +96,8 @@ class S2CDeclareTags : Packet(0x5b, null) {
             "minecraft:doors"
         )
         // ITEMS
-        addEmptyTags(buf,
+        addEmptyTags(
+            buf,
             "minecraft:banners",
             "minecraft:soul_fire_base_blocks",
             "minecraft:stone_crafting_materials",
@@ -155,7 +156,8 @@ class S2CDeclareTags : Packet(0x5b, null) {
         // FLUIDS
         addEmptyTags(buf, "minecraft:lava", "minecraft:water")
         // ENTITIES
-        addEmptyTags(buf,
+        addEmptyTags(
+            buf,
             "minecraft:skeletons",
             "minecraft:raiders",
             "minecraft:arrows",

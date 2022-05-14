@@ -9,8 +9,6 @@ import com.liamcoalstudio.kettle.networking.main.TCPServer
 import com.liamcoalstudio.kettle.networking.main.packets.ServerState
 import com.liamcoalstudio.kettle.servers.main.KettleServer
 import com.liamcoalstudio.kettle.servers.main.QueueExecutor
-import com.liamcoalstudio.kettle.world.Player
-import java.lang.Exception
 import java.util.concurrent.Executor
 import java.util.concurrent.atomic.AtomicReference
 
@@ -30,7 +28,7 @@ class JavaServer : Server {
             }
         }.start()
         val init = initObjects() &&
-                   initNetworking()
+                initNetworking()
         server.accept(this::clientConnected)
         GLOBAL = this
         return init
@@ -69,7 +67,7 @@ class JavaServer : Server {
     }
 
     private fun tickNetworking() {
-        if(KettleServer.GLOBAL!!.get().isFullyInitialized)
+        if (KettleServer.GLOBAL!!.get().isFullyInitialized)
             KettleServer.GLOBAL!!.get().worlds[Dimension.OVERWORLD]!!.players.forEach { it.client!!.tick() }
     }
 
@@ -78,9 +76,10 @@ class JavaServer : Server {
         server.accept(this::clientConnected)
     }
 
-    val state: ServerState get() {
-        return ServerState(this)
-    }
+    val state: ServerState
+        get() {
+            return ServerState(this)
+        }
 
     companion object {
         const val PROTOCOL_NUMBER = 754

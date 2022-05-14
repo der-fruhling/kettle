@@ -17,7 +17,7 @@ interface Server {
     fun start(): ServerController {
         val t = Thread {
             init()
-            while(shouldTick()) {
+            while (shouldTick()) {
                 val start = Calendar.getInstance()
                 tick()
                 val end = Calendar.getInstance()
