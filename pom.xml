@@ -114,7 +114,7 @@
         <dependency>
             <groupId>com.github.Querz</groupId>
             <artifactId>NBT</artifactId>
-            <version>6.0</version>
+            <version>6.1</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlinx</groupId>
