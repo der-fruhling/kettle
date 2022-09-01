@@ -1,6 +1,5 @@
 package com.liamcoalstudio.kettle.networking.java.play
 
-import com.liamcoalstudio.kettle.helpers.Buffer
 import com.liamcoalstudio.kettle.helpers.Dimension
 import com.liamcoalstudio.kettle.networking.main.Client
 import com.liamcoalstudio.kettle.networking.main.packets.ClientState

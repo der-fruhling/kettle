@@ -108,7 +108,11 @@ class KettleServer {
         worlds.forEach { (dimension, world) ->
             logger.info("Saving world $dimension")
             val nbt = WorldNBTEncoder.encode(world, chunksList)
-            NBTUtil.write(NamedTag("World", nbt), File("worlds/${dimension.name.lowercase(Locale.getDefault())}.nbt"), true)
+            NBTUtil.write(
+                NamedTag("World", nbt),
+                File("worlds/${dimension.name.lowercase(Locale.getDefault())}.nbt"),
+                true
+            )
         }
 
         logger.info("Saving chunks")

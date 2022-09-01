@@ -36,7 +36,12 @@ object KettleProperties {
             wr.write(defaultConfig)
             wr.close()
         }
-        val p = FileReader("properties.json").use { Json.decodeFromString<ServerConfiguration>(serializer(), it.readText()) }
+        val p = FileReader("properties.json").use {
+            Json.decodeFromString<ServerConfiguration>(
+                serializer(),
+                it.readText()
+            )
+        }
         motd = p.motd
         viewDistance = p.viewDistance
         gamemode = p.gamemode
