@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="kettle" target="13" />
+      <module name="kettle" target="18" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
